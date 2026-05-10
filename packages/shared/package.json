@@ -1,0 +1,23 @@
+{
+  "name": "@d3-toolkit/shared",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./python": "./dist/python/index.js",
+    "./composables": "./dist/composables/index.js",
+    "./google-sheets": "./dist/google-sheets/index.js"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "vue": "^3.4.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "@types/node": "^20.0.0"
+  }
+}

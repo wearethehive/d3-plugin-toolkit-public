@@ -1,0 +1,13 @@
+node_modules/
+dist/
+*.log
+.env
+.DS_Store
+*.tsbuildinfo
+.d3-toolkit.json
+*_timeline.json
+*.bak
+*.py.tmp.*
+vite.config.ts.timestamp-*.mjs
+vite.config.ts.tmp.*
+kb-submissions/
