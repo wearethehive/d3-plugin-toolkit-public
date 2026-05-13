@@ -62,14 +62,15 @@ The script is whitelist-based. It copies:
 - public build/safety scripts
 - public docs
 - curated knowledge-base entries
-- root TypeScript, Vitest, Agent, README, LICENSE, and npm workspace metadata
+- root TypeScript, Vitest, Agent, Claude, Codex, generated README, generated
+  LICENSE, and npm workspace metadata
 
 It does not copy:
 
 - private plugin workspaces from `packages/plugins`
 - raw `packages/knowledge-base/reference-tools` probe scripts
 - private legacy utility scripts
-- `.claude`, `CLAUDE.md`, local settings, or `.d3-toolkit.json`
+- `.claude/settings.local.json`, local settings, or `.d3-toolkit.json`
 - generated logs and session JSONL files
 - private Obsidian export tooling
 - knowledge-base files that mention private plugin workspace names

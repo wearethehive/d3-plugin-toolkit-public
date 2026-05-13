@@ -120,12 +120,17 @@ Runs all tests defined in `packages/knowledge-base/test-suites/<name>.json`.
 ## Probe / Introspect a d3 Type
 
 ```bash
-npm run cli -- probe Indirection
-npm run cli -- probe "guisystem.track" --all
+npm run cli -- probe Indirection --unsafe-dir
+npm run cli -- probe "guisystem.track" --all --unsafe-dir
 ```
 
 Lists all properties, methods, and errors for a d3 type or live object.
 `--all` includes private attributes (those starting with `_`).
+
+Broad `dir()` probes can crash Designer on some objects, so the command refuses
+to run unless `--unsafe-dir` is passed. Prefer existing focused probes in
+`packages/knowledge-base/reference-tools/` or write a narrow probe and run it
+with `npm run cli -- exec --file <probe.py>`.
 
 ---
 
@@ -197,7 +202,8 @@ npm -w packages/plugins/my-plugin run build
 ### Investigate an API before using it
 ```bash
 npm run cli -- session snapshot --label "before"
-npm run cli -- probe SomeType
+npm run cli -- exec --file packages/knowledge-base/reference-tools/my-focused-probe.py
+npm run cli -- probe SomeType --unsafe-dir
 npm run cli -- discover SomeType --depth 2
 npm run cli -- test "someExpression()"
 npm run cli -- learn

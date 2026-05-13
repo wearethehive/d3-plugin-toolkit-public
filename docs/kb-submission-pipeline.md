@@ -18,9 +18,11 @@ toolkit does not auto-upload submissions.
    ```
 
 3. User uploads that single JSON file through Hive School.
-4. Hive School validates the JSON, previews it, collects consent/rights
-   confirmation, and creates a private review item.
-5. Maintainers rewrite accepted findings into canonical KB Markdown.
+4. The Hive School page posts directly to a small quarantined upload endpoint,
+   not to WordPress.
+5. The endpoint validates the JSON, collects consent/rights confirmation,
+   applies a daily accepted-upload cap, and quarantines the raw payload.
+6. Maintainers rewrite accepted findings into canonical KB Markdown.
 
 ## What The Payload Contains
 
@@ -42,6 +44,13 @@ public KB entry.
 - Treat the payload as untrusted text.
 - Sanitize Markdown before previewing.
 - Do not execute anything from the payload.
+- Do not send the raw payload to WordPress.
+- Do not store payload data in WordPress post content, post meta, or the Media
+  Library.
+- Quarantine the raw payload in a non-public location and keep review metadata
+  with the quarantined object.
+- Cap accepted uploads per day so abuse makes submission temporarily
+  unavailable instead of producing open-ended storage or operation usage.
 - Collect explicit confirmation that the user has rights to submit the result
   and that it contains no confidential project/client data.
 - Store submissions in a private review queue.

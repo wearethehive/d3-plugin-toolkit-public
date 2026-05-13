@@ -117,6 +117,18 @@ any Designer Python work. This agent is the mandatory final step — not optiona
 
 ## Workflow Templates
 
+### New Plugin From User Prompt
+1. **Toolkit Engineer** -> read `@docs/cheat-sheet.md`, scaffold with
+   `npm run cli -- scaffold <plugin-name> --title "..."`, then run
+   `npm install`
+2. **Designer Python Engineer** -> pre-flight, search KB/reference-tools for
+   each Designer API, run focused live Designer probes when behavior is not
+   already proven
+3. **Plugin Frontend Engineer** -> wire Vue composables, UI, and Python module
+   calls
+4. **QA Engineer** -> crasher audit, plugin build, and test-suite/probe review
+5. **Knowledge Curator** -> document new findings and produce SESSION SUMMARY
+
 ### New Plugin Feature
 1. **Designer Python Engineer** → pre-flight, implement .py module files
 2. **QA Engineer** → crasher audit, write test suite entry

@@ -22,6 +22,7 @@ on them for behavior. The Codex-facing workflow is this file plus
   plugin architecture.
 - `docs/mandatory-workflow.md` - required workflow before Designer API changes.
 - `docs/codex-workflows.md` - Codex work modes and checklists.
+- `.codex/hooks.json` - portable Codex hook configuration where supported.
 
 ## Always-On Rules
 
@@ -33,6 +34,12 @@ on them for behavior. The Codex-facing workflow is this file plus
   internal C++ surfaces that are not necessarily valid plugin APIs.
 - Official Disguise docs plus tested local knowledge base entries outrank
   plausible inference from `d3.pyi`.
+- Before implementation, choose the mandatory operating model from
+  `docs/codex-workflows.md`: Single-Agent Dogfooding for established plugin use,
+  or Orchestrated Structural Work for larger/riskier toolkit changes.
+- Orchestrated Structural Work requires explicit role gates and a final
+  Knowledge Curator pass. If Codex subagents are not being used, run the same
+  gates sequentially in the main agent; do not skip them.
 
 ## Designer Python Pre-Flight
 
@@ -58,6 +65,28 @@ Critical Python rules:
   with `__all__` exports and call it through `@disguise-one/designer-pythonapi`.
 - Every Designer method name must exist in `packages/shared/d3.pyi`; if it does
   not, stop and probe.
+
+## New Plugin Requests
+
+When asked to create a Disguise plugin from a prompt, do not hand-build the
+workspace structure. Use the toolkit as the public user would:
+
+1. Read `docs/cheat-sheet.md` for current CLI commands.
+2. Create the plugin with `npm run cli -- scaffold <plugin-name> --title "..."`
+   unless the plugin already exists.
+3. Run `npm install` after scaffolding so the new workspace is registered.
+4. Put Designer behavior in plugin `.py` modules with `__all__` exports, and
+   call those modules from Vue/TypeScript.
+5. Before using any Designer API, search the KB and reference probes first:
+   `packages/knowledge-base/patterns/`, `bugs/`, and `reference-tools/`.
+6. If behavior is not proven, run a focused probe against live Designer with the
+   CLI, for example `npm run cli -- exec --file <probe.py>`, `npm run cli --
+   test "<expr>"`, or a purpose-built test suite. Use broad `npm run cli --
+   probe <target> --unsafe-dir` only in disposable sessions.
+7. Capture live-context changes when useful with `npm run cli -- session
+   snapshot` before and after the work, then `npm run cli -- session diff`.
+8. Build with `npm -w packages/plugins/<plugin> run build`.
+9. Record new Designer findings through the KB/test-log/session-log workflow.
 
 ## Frontend Rules
 
@@ -86,7 +115,7 @@ check is a repo-level safety net, not a substitute for the pre-flight above.
 
 ## Knowledge Capture
 
-After any Designer Python discovery:
+After any Designer Python discovery, probe, crash, or structural workflow change:
 
 - New confirmed pattern: add `packages/knowledge-base/patterns/<name>.md`.
 - New confirmed bug/crasher: add `packages/knowledge-base/bugs/<name>.md`.
@@ -94,4 +123,7 @@ After any Designer Python discovery:
   the CLI when possible.
 - Important repeated or dangerous discoveries should be proposed for promotion
   to `docs/reference.md`; the user decides.
+- Complete the mandatory knowledge report defined in `docs/codex-workflows.md`:
+  Single-Agent Knowledge Report for dogfooding work, Orchestrated Curator Report
+  for structural work.
 
