@@ -1,6 +1,7 @@
 {
   "name": "d3-plugin-toolkit",
   "private": true,
+  "license": "LicenseRef-HiveSchool-Source-Available-1.0",
   "description": "Toolkit for building Disguise Designer plugins with Vue, Vite, TypeScript, and guarded Designer Python workflows.",
   "workspaces": [
     "packages/cli",

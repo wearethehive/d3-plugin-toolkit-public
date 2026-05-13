@@ -138,6 +138,14 @@ sessions, but focused probes and KB patterns are preferred.
 
 The community probe submission portal is coming soon. For now, share findings through GitHub issues or direct maintainer review.
 
+## License
+
+This project is source-available, not open source under an OSI-approved license.
+You may use the toolkit for free to build your own Disguise Designer plugins,
+including plugins you use or distribute, but you may not sell, repackage,
+redistribute, or offer the toolkit itself as a competing product or service
+without written permission. See `LICENSE`.
+
 ## Assistant Workflows
 
 This repository includes assistant-facing workflow files because they are part
