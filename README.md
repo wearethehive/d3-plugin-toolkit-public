@@ -13,22 +13,48 @@ This public repository contains the toolkit, shared utilities, scaffold template
 - Disguise Designer for live API execution and plugin testing
 - Python available as `python3` when building plugins that use `@disguise-one/designer-pythonapi`
 
-## Setup
+## First-Time Quick Start
+
+Run these commands from the toolkit root folder, the folder that contains this
+`package.json` file. For example, after unzipping the toolkit:
+
+```powershell
+cd C:\path\to\d3-plugin-toolkit-public
+```
+
+Install dependencies and build the toolkit CLI:
 
 ```bash
 npm install
 npm run build:shared
 npm run build:cli
-npm test
 ```
 
-## Create a Plugin
+Then create your first plugin:
 
 ```bash
 npm run cli -- scaffold my-plugin --title "My Plugin"
 npm install
 npm -w packages/plugins/my-plugin run dev
 ```
+
+The scaffold command creates `packages/plugins/my-plugin/` inside this toolkit
+workspace. Run the second `npm install` after scaffolding so npm registers the
+new plugin workspace.
+
+Optional toolkit check:
+
+```bash
+npm test
+```
+
+### If `npm run cli` cannot find `packages/cli/dist/index.js`
+
+That means the CLI has not been built yet, or the command was run from outside
+the toolkit root. Run `npm run build:shared` and `npm run build:cli` from the
+toolkit root, then retry the scaffold command.
+
+## Build a Plugin
 
 Build the plugin for Designer:
 
