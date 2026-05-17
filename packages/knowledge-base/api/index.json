@@ -1,0 +1,529 @@
+[
+  {
+    "file": "api/guisystem.md",
+    "status": "works",
+    "object": "guisystem",
+    "testedDate": "2026-03-15"
+  },
+  {
+    "file": "api/resourceManager.md",
+    "status": "works",
+    "object": "resourceManager",
+    "testedDate": "2026-03-15"
+  },
+  {
+    "file": "api/resources-by-type.md",
+    "status": "works",
+    "object": "resources-by-type",
+    "testedDate": "2026-03-22"
+  },
+  {
+    "file": "api/tags-and-types.md",
+    "status": "works",
+    "object": "tags-and-types",
+    "testedDate": "2026-03-22"
+  },
+  {
+    "file": "api/track-addNewLayer.md",
+    "status": "works",
+    "object": "track-addNewLayer",
+    "testedDate": "2026-03-15"
+  },
+  {
+    "file": "api/transport.md",
+    "status": "works",
+    "object": "transport",
+    "testedDate": "2026-03-22"
+  },
+  {
+    "file": "patterns/active-context-resolution.md",
+    "status": "observed",
+    "pattern": "active-context-resolution",
+    "testedDate": "2026-05-03"
+  },
+  {
+    "file": "patterns/bare-except-required.md",
+    "status": "confirmed",
+    "pattern": "bare-except-required",
+    "testedDate": "2026-04-04"
+  },
+  {
+    "file": "patterns/c++-binding-non-exception-failures.md",
+    "status": "confirmed",
+    "pattern": "c++-binding-non-exception-failures",
+    "testedDate": "2026-04-08"
+  },
+  {
+    "file": "patterns/create-or-duplicate.md",
+    "status": "workaround",
+    "pattern": "create-or-duplicate",
+    "testedDate": "2026-03-15"
+  },
+  {
+    "file": "patterns/cue-list-robust-extraction.md",
+    "status": "observed",
+    "pattern": "cue-list-robust-extraction",
+    "testedDate": "2026-05-03"
+  },
+  {
+    "file": "patterns/cue-removal.md",
+    "status": "confirmed",
+    "pattern": "cue-removal",
+    "testedDate": "2026-04-04"
+  },
+  {
+    "file": "patterns/cue-section-authoring.md",
+    "status": "observed",
+    "pattern": "cue-section-authoring",
+    "testedDate": "2026-05-03"
+  },
+  {
+    "file": "patterns/cuelist-query.md",
+    "status": "observed",
+    "pattern": "cuelist-query",
+    "testedDate": "2026-04-19"
+  },
+  {
+    "file": "patterns/disguise-docs-as-source-of-truth.md",
+    "status": "confirmed",
+    "pattern": "disguise-docs-as-source-of-truth",
+    "testedDate": "2026-04-08"
+  },
+  {
+    "file": "patterns/display-output-capture.md",
+    "status": "observed",
+    "pattern": "display-output-capture",
+    "testedDate": "2026-04-11"
+  },
+  {
+    "file": "patterns/expression-api.md",
+    "status": "documented",
+    "pattern": "expression-api"
+  },
+  {
+    "file": "patterns/feed-scene-config.md",
+    "status": "confirmed",
+    "pattern": "feed-scene-config",
+    "testedDate": "2026-03-25"
+  },
+  {
+    "file": "patterns/feedrect-deform-stack-editing.md",
+    "status": "observed",
+    "pattern": "feedrect-deform-stack-editing",
+    "testedDate": "2026-04-11"
+  },
+  {
+    "file": "patterns/feedrect-mask-blackout.md",
+    "status": "confirmed",
+    "pattern": "feedrect-mask-blackout",
+    "testedDate": "2026-04-11"
+  },
+  {
+    "file": "patterns/group-layer-creation.md",
+    "status": "confirmed",
+    "pattern": "group-layer-creation",
+    "testedDate": "2026-03-25",
+    "designerVersion": "r32.3.4"
+  },
+  {
+    "file": "patterns/indirection-setup.md",
+    "status": "confirmed",
+    "pattern": "indirection-setup",
+    "testedDate": "2026-03-17"
+  },
+  {
+    "file": "patterns/layer-field-discovery-and-update.md",
+    "status": "observed",
+    "pattern": "layer-field-discovery-and-update",
+    "testedDate": "2026-05-03"
+  },
+  {
+    "file": "patterns/layer-field-sequences.md",
+    "status": "confirmed",
+    "pattern": "layer-field-sequences",
+    "testedDate": "2026-05-04"
+  },
+  {
+    "file": "patterns/layer-mapping-assignment.md",
+    "status": "confirmed",
+    "pattern": "layer-mapping-assignment",
+    "testedDate": "2026-04-04"
+  },
+  {
+    "file": "patterns/layer-module-access.md",
+    "status": "confirmed",
+    "pattern": "layer-module-access",
+    "testedDate": "2026-04-07",
+    "designerVersion": "r32.4"
+  },
+  {
+    "file": "patterns/liveupdate-subscribe.md",
+    "status": "confirmed",
+    "pattern": "liveupdate-subscribe",
+    "testedDate": "2026-03-22"
+  },
+  {
+    "file": "patterns/media-thumbnail-extraction.md",
+    "status": "confirmed",
+    "pattern": "media-thumbnail-extraction",
+    "testedDate": "2026-05-03"
+  },
+  {
+    "file": "patterns/notch-module-enumeration.md",
+    "status": "needs-live-probe",
+    "pattern": "notch-module-enumeration"
+  },
+  {
+    "file": "patterns/osc-bridge-server-stdlib.md",
+    "status": "observed",
+    "pattern": "osc-bridge-server-stdlib",
+    "testedDate": "2026-05-03"
+  },
+  {
+    "file": "patterns/osc-device-lifecycle.md",
+    "status": "confirmed",
+    "pattern": "osc-device-lifecycle",
+    "testedDate": "2026-04-07"
+  },
+  {
+    "file": "patterns/plugin-cef-polling.md",
+    "status": "confirmed",
+    "pattern": "plugin-cef-polling",
+    "testedDate": "2026-04-24"
+  },
+  {
+    "file": "patterns/plugin-console-debugging.md",
+    "status": "confirmed",
+    "pattern": "plugin-console-debugging",
+    "testedDate": "2026-04-07"
+  },
+  {
+    "file": "patterns/plugin-window-sizing.md",
+    "status": "observed",
+    "pattern": "plugin-window-sizing",
+    "testedDate": "2026-04-19"
+  },
+  {
+    "file": "patterns/python-attribute-assignment-is-permissive.md",
+    "status": "confirmed",
+    "pattern": "python-attribute-assignment-is-permissive",
+    "testedDate": "2026-04-08"
+  },
+  {
+    "file": "patterns/safe-iteration.md",
+    "status": "required",
+    "pattern": "safe-iteration",
+    "testedDate": "2026-03-15"
+  },
+  {
+    "file": "patterns/sandbox-stdlib.md",
+    "status": "confirmed",
+    "pattern": "sandbox-stdlib",
+    "testedDate": "2026-04-07"
+  },
+  {
+    "file": "patterns/stage-screen-and-projection-setup.md",
+    "status": "observed",
+    "pattern": "stage-screen-and-projection-setup",
+    "testedDate": "2026-05-03"
+  },
+  {
+    "file": "patterns/subprocess-from-sandbox.md",
+    "status": "confirmed",
+    "pattern": "subprocess-from-sandbox",
+    "testedDate": "2026-04-08",
+    "designerVersion": "r32.4"
+  },
+  {
+    "file": "patterns/timecode-transport-ltc-lifecycle.md",
+    "status": "confirmed",
+    "pattern": "timecode-transport-ltc-lifecycle",
+    "testedDate": "2026-04-07"
+  },
+  {
+    "file": "patterns/timeline-export-cues.md",
+    "status": "confirmed",
+    "pattern": "timeline-export-cues",
+    "testedDate": "2026-03-25"
+  },
+  {
+    "file": "patterns/timeline-export-keyframe-access.md",
+    "status": "confirmed",
+    "pattern": "timeline-export-keyframe-access",
+    "testedDate": "2026-03-25",
+    "designerVersion": "r32.3.4"
+  },
+  {
+    "file": "patterns/timeline-import-resources.md",
+    "status": "confirmed",
+    "pattern": "timeline-import-resources",
+    "testedDate": "2026-03-25",
+    "designerVersion": "r32.3.4"
+  },
+  {
+    "file": "patterns/track-wipe.md",
+    "status": "candidate",
+    "pattern": "track-wipe",
+    "testedDate": "2026-04-24"
+  },
+  {
+    "file": "patterns/transport-commands.md",
+    "status": "documented",
+    "pattern": "transport-commands"
+  },
+  {
+    "file": "patterns/transport-manager-access.md",
+    "status": "confirmed",
+    "pattern": "transport-manager-access"
+  },
+  {
+    "file": "patterns/transport-playhead-and-section-navigation.md",
+    "status": "observed",
+    "pattern": "transport-playhead-and-section-navigation",
+    "testedDate": "2026-05-03"
+  },
+  {
+    "file": "patterns/video-content-management.md",
+    "status": "observed",
+    "pattern": "video-content-management",
+    "testedDate": "2026-05-03"
+  },
+  {
+    "file": "patterns/video-input-config.md",
+    "status": "confirmed",
+    "pattern": "video-input-config",
+    "testedDate": "2026-03-25"
+  },
+  {
+    "file": "patterns/video-layer-placement.md",
+    "status": "observed",
+    "pattern": "video-layer-placement",
+    "testedDate": "2026-05-03"
+  },
+  {
+    "file": "patterns/videofile-unlock-and-move.md",
+    "status": "confirmed",
+    "pattern": "videofile-unlock-and-move",
+    "testedDate": "2026-05-07"
+  },
+  {
+    "file": "patterns/visualiser-camera-and-screenshots.md",
+    "status": "observed",
+    "pattern": "visualiser-camera-and-screenshots",
+    "testedDate": "2026-05-03"
+  },
+  {
+    "file": "bugs/addLayer-crash.md",
+    "status": "confirmed",
+    "bug": "addLayer-crash",
+    "severity": "crash",
+    "testedDate": "2026-03-15"
+  },
+  {
+    "file": "bugs/dir-crash.md",
+    "status": "confirmed",
+    "bug": "dir-crash",
+    "severity": "crash",
+    "testedDate": "2026-03-15"
+  },
+  {
+    "file": "bugs/dxtexture-display-methods-crash-on-director.md",
+    "status": "confirmed",
+    "bug": "dxtexture-display-methods-crash-on-director",
+    "severity": "crash",
+    "testedDate": "2026-04-11"
+  },
+  {
+    "file": "bugs/dxtexture-resize-writing-pixels-crash.md",
+    "status": "confirmed",
+    "bug": "dxtexture-resize-writing-pixels-crash",
+    "severity": "crash",
+    "testedDate": "2026-04-11"
+  },
+  {
+    "file": "bugs/enabledVersion-non-videoclip-crash.md",
+    "status": "confirmed",
+    "bug": "enabledVersion-non-videoclip-crash",
+    "severity": "crash",
+    "testedDate": "2026-05-07"
+  },
+  {
+    "file": "bugs/eventtransport-local-vs-remote-engaged-rule.md",
+    "status": "confirmed",
+    "bug": "eventtransport-local-vs-remote-engaged-rule",
+    "severity": "silent-failure",
+    "testedDate": "2026-04-08"
+  },
+  {
+    "file": "bugs/except-exception-does-not-catch-valueerror.md",
+    "status": "confirmed",
+    "bug": "except-exception-does-not-catch-valueerror",
+    "severity": "critical",
+    "testedDate": "2026-05-07"
+  },
+  {
+    "file": "bugs/execute-large-inline-string-crash.md",
+    "status": "confirmed",
+    "bug": "execute-large-inline-string-crash",
+    "severity": "crash",
+    "testedDate": "2026-05-04"
+  },
+  {
+    "file": "bugs/inject-root-component.md",
+    "status": "confirmed",
+    "bug": "inject-root-component",
+    "severity": "silent-failure",
+    "testedDate": "2026-03-22"
+  },
+  {
+    "file": "bugs/keyaskeycontainer-crash.md",
+    "status": "confirmed",
+    "bug": "keyaskeycontainer-crash",
+    "severity": "crash",
+    "testedDate": "2026-03-16",
+    "designerVersion": "r32.3.4"
+  },
+  {
+    "file": "bugs/layer-add-gui-side-effect.md",
+    "status": "confirmed",
+    "bug": "layer-add-gui-side-effect",
+    "severity": "cosmetic",
+    "testedDate": "2026-04-07"
+  },
+  {
+    "file": "bugs/layer-mapping-direct-access-crash.md",
+    "status": "confirmed",
+    "bug": "layer-mapping-direct-access-crash",
+    "severity": "crash",
+    "testedDate": "2026-05-04"
+  },
+  {
+    "file": "bugs/loadOrCreate-access-violation.md",
+    "status": "confirmed",
+    "bug": "loadOrCreate-access-violation",
+    "severity": "crash",
+    "testedDate": "2026-03-15"
+  },
+  {
+    "file": "bugs/loadorcreate-hook-blocks-all-types.md",
+    "status": "confirmed",
+    "bug": "loadorcreate-hook-blocks-all-types",
+    "severity": "error",
+    "testedDate": "2026-04-08"
+  },
+  {
+    "file": "bugs/optional-args-undefined-python.md",
+    "status": "confirmed",
+    "bug": "optional-args-undefined-python",
+    "severity": "error",
+    "testedDate": "2026-04-11"
+  },
+  {
+    "file": "bugs/os-makedirs-project-folder-crash.md",
+    "status": "observed",
+    "bug": "os-makedirs-project-folder-crash",
+    "severity": "crash",
+    "testedDate": "2026-04-11"
+  },
+  {
+    "file": "bugs/osc-port-collision-kernel-binding.md",
+    "status": "confirmed",
+    "bug": "osc-port-collision-kernel-binding",
+    "severity": "error",
+    "testedDate": "2026-04-08"
+  },
+  {
+    "file": "bugs/oscdevice-missing-flag-harmless.md",
+    "status": "confirmed",
+    "bug": "oscdevice-missing-flag-harmless",
+    "severity": "cosmetic",
+    "testedDate": "2026-04-08"
+  },
+  {
+    "file": "bugs/osctester-is-not-a-receive-consumer.md",
+    "status": "confirmed",
+    "bug": "osctester-is-not-a-receive-consumer",
+    "severity": "silent-failure",
+    "testedDate": "2026-04-08"
+  },
+  {
+    "file": "bugs/phantom-method-invented-from-plausibility.md",
+    "status": "confirmed",
+    "bug": "phantom-method-invented-from-plausibility",
+    "severity": "error",
+    "testedDate": "2026-04-24",
+    "designerVersion": "r32.x"
+  },
+  {
+    "file": "bugs/python-file-write-crashers.md",
+    "status": "confirmed",
+    "bug": "python-file-write-crashers",
+    "severity": "crash",
+    "testedDate": "2026-05-04"
+  },
+  {
+    "file": "bugs/registermodule-atexit-import.md",
+    "status": "observed",
+    "bug": "registermodule-atexit-import",
+    "severity": "error",
+    "testedDate": "2026-04-11"
+  },
+  {
+    "file": "bugs/registermodule-import-d3.md",
+    "status": "confirmed",
+    "bug": "registermodule-import-d3",
+    "severity": "error",
+    "testedDate": "2026-03-17"
+  },
+  {
+    "file": "bugs/resourcemanager-get-crash.md",
+    "status": "confirmed",
+    "bug": "resourcemanager-get-crash",
+    "severity": "crash",
+    "testedDate": "2026-03-15"
+  },
+  {
+    "file": "bugs/resourcemanager-load-untyped.md",
+    "status": "confirmed",
+    "bug": "resourcemanager-load-untyped",
+    "severity": "error",
+    "testedDate": "2026-03-18",
+    "designerVersion": "r32.3.4"
+  },
+  {
+    "file": "bugs/resources-append-crash.md",
+    "status": "confirmed",
+    "bug": "resources-append-crash",
+    "severity": "crash",
+    "testedDate": "2026-03-17",
+    "designerVersion": "r32.3.4"
+  },
+  {
+    "file": "bugs/setString-empty-keysequence.md",
+    "status": "confirmed",
+    "bug": "setString-empty-keysequence",
+    "severity": "error",
+    "testedDate": "2026-03-15"
+  },
+  {
+    "file": "bugs/state-track-crash.md",
+    "status": "confirmed",
+    "bug": "state-track-crash",
+    "severity": "crash",
+    "testedDate": "2026-03-15"
+  },
+  {
+    "file": "bugs/videofile-description-no-extension.md",
+    "status": "confirmed",
+    "bug": "videofile-description-no-extension",
+    "severity": "silent-failure",
+    "testedDate": "2026-05-07"
+  },
+  {
+    "file": "bugs/videofile-videoclip-mismatch.md",
+    "status": "confirmed",
+    "bug": "videofile-videoclip-mismatch",
+    "severity": "critical",
+    "testedDate": "2026-03-15"
+  }
+]

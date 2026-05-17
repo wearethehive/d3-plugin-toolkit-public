@@ -1,0 +1,128 @@
+rules:
+  # ── Layer creation crashes ──────────────────────────────────────────────
+  - id: d3.addLayer-crash
+    pattern: $TRACK.addLayer(...)
+    message: "track.addLayer() crashes Designer at C++ level (not catchable). Use track.addNewLayer(Type, start, length, name) with exactly 4 args."
+    languages: [python]
+    severity: ERROR
+    metadata:
+      doc: bugs/addLayer-crash.md
+      kb-severity: CRASH
+
+  - id: d3.layers-append-crash
+    pattern: $TRACK.layers.append(...)
+    message: "track.layers.append() crashes Designer. Use track.addNewLayer(Type, start, length, name)."
+    languages: [python]
+    severity: ERROR
+    metadata:
+      doc: bugs/addLayer-crash.md
+      kb-severity: CRASH
+
+  # ── dir() crash ─────────────────────────────────────────────────────────
+  - id: d3.dir-crash
+    patterns:
+      - pattern: dir(...)
+    message: "dir() on d3 objects enumerates Action-type properties causing C++ crash. Use getattr(obj, 'attr', None) instead."
+    languages: [python]
+    severity: WARNING
+    metadata:
+      doc: bugs/dir-crash.md
+      kb-severity: CRASH
+
+  # ── loadOrCreate crash ──────────────────────────────────────────────────
+  - id: d3.loadOrCreate-crash
+    pattern: $RM.loadOrCreate(...)
+    message: "loadOrCreate() causes ACCESS_VIOLATION for Indirection/ListIndirectionController. Use create-or-duplicate pattern."
+    languages: [python]
+    severity: ERROR
+    metadata:
+      doc: bugs/loadOrCreate-access-violation.md
+      kb-severity: CRASH
+
+  # ── Collection mutation crashes ─────────────────────────────────────────
+  - id: d3.resources-append-crash
+    pattern: $CTRL.resources.append(...)
+    message: "ctrl.resources.append() crashes Designer. Use full list assignment: ctrl.resources = [list]."
+    languages: [python]
+    severity: ERROR
+    metadata:
+      doc: bugs/resources-append-crash.md
+      kb-severity: CRASH
+
+  - id: d3.resources-erase-crash
+    pattern: $CTRL.resources.erase(...)
+    message: "ctrl.resources.erase() crashes Designer. Use full list assignment: ctrl.resources = [list]."
+    languages: [python]
+    severity: ERROR
+    metadata:
+      doc: bugs/resources-append-crash.md
+      kb-severity: CRASH
+
+  # ── Type mismatches ─────────────────────────────────────────────────────
+  - id: d3.videofile-corruption
+    pattern: d3.VideoFile
+    message: "d3.VideoFile in indirection controllers causes PROJECT CORRUPTION. Use d3.VideoClip instead."
+    languages: [python]
+    severity: ERROR
+    metadata:
+      doc: bugs/videofile-videoclip-mismatch.md
+      kb-severity: CRITICAL
+
+  # ── Singleton access crashes ────────────────────────────────────────────
+  - id: d3.resourcemanager-get-crash
+    pattern: d3.ResourceManager.get(...)
+    message: "d3.ResourceManager.get() causes HTTP 500. Use the global 'resourceManager' object instead."
+    languages: [python]
+    severity: ERROR
+    metadata:
+      doc: bugs/resourcemanager-get-crash.md
+      kb-severity: CRASH
+
+  - id: d3.state-track-crash
+    pattern: state.track
+    message: "state.track causes HTTP 500. Use guisystem.track instead."
+    languages: [python]
+    severity: ERROR
+    metadata:
+      doc: bugs/state-track-crash.md
+      kb-severity: CRASH
+
+  # ── KeyAsKeyContainer crash ─────────────────────────────────────────────
+  - id: d3.keyaskeycontainer-crash
+    pattern: $SEQ.key($IDX).$PROP
+    message: "Accessing properties on KeyAsKeyContainer crashes Designer. Use getSequencedValue() as a fallback."
+    languages: [python]
+    severity: ERROR
+    metadata:
+      doc: bugs/keyaskeycontainer-crash.md
+      kb-severity: CRASH
+
+  # ── setString on empty sequence ─────────────────────────────────────────
+  - id: d3.setstring-empty-keysequence
+    pattern: $KS.setString(0, ...)
+    message: "setString(0, ...) on an empty KeySequence throws IndexError. Ensure at least one key exists first (insertKeyContainer)."
+    languages: [python]
+    severity: WARNING
+    metadata:
+      doc: bugs/setString-empty-keysequence.md
+      kb-severity: ERROR
+
+  # ── Timeline destruction ────────────────────────────────────────────────
+  - id: d3.cues-clear-crash
+    pattern: $TRACK.cues.clear(...)
+    message: "track.cues.clear() destroys the timeline structure and is unrecoverable. Use track.cues.removeAtTime(beat)."
+    languages: [python]
+    severity: ERROR
+    metadata:
+      doc: patterns/cue-removal.md
+      kb-severity: CRASH
+
+  # ── Assignment that doesn't persist ─────────────────────────────────────
+  - id: d3.mapping-assignment-noop
+    pattern: $LAYER.module.mapping = $VAL
+    message: "layer.module.mapping = proj does not persist. Use layer.findSequence('mapping').sequence.setResource(beat, proj) + field.notifyEdit()."
+    languages: [python]
+    severity: WARNING
+    metadata:
+      doc: patterns/layer-mapping-assignment.md
+      kb-severity: WARN

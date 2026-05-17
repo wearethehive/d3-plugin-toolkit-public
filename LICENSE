@@ -1,0 +1,68 @@
+Hive School Source-Available License 1.0
+
+Copyright (c) 2026 The Hive
+
+This license applies to the d3 Plugin Toolkit source code, documentation,
+templates, scripts, knowledge base, and other materials in this repository
+(the "Toolkit").
+
+The Toolkit is source-available. It is not released under an open source
+license.
+
+1. Free Use
+
+You may, free of charge:
+
+- view, clone, download, install, and run the Toolkit;
+- use the Toolkit to scaffold, build, test, and maintain your own Disguise
+  Designer plugins;
+- modify the Toolkit for your own personal, educational, evaluation, or internal
+  development use;
+- share bug reports, patches, and improvement suggestions with The Hive.
+
+2. Plugin Output
+
+Plugins, plugin source files, and plugin builds that you create with the Toolkit
+are yours. You may use, distribute, or sell those plugins, including generated
+scaffold/template output, provided that you do not redistribute the Toolkit
+itself except as allowed by this license.
+
+3. Redistribution Restrictions
+
+Without prior written permission from The Hive, you may not:
+
+- sell, license, sublicense, rent, lease, or commercially host the Toolkit;
+- publish, mirror, repackage, or redistribute the Toolkit, modified or
+  unmodified, as a competing toolkit, template pack, SDK, platform, hosted
+  service, marketplace product, course bundle, or paid download;
+- remove or obscure copyright notices, license notices, or attribution in the
+  Toolkit;
+- use the names "The Hive", "Hive School", or "d3 Plugin Toolkit" to imply
+  endorsement of your product or service.
+
+4. Contributions
+
+Unless agreed otherwise in writing, any contribution you submit to this
+repository is offered under this same license and may be used by The Hive in the
+Toolkit.
+
+5. Third-Party Materials
+
+Third-party dependencies, packages, trademarks, and Disguise Designer materials
+remain subject to their own licenses and terms. This license does not grant
+rights in Disguise Designer or any third-party software.
+
+6. No Warranty
+
+THE TOOLKIT IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE, TITLE, AND NONINFRINGEMENT. USE IT AT YOUR OWN RISK.
+
+7. Limitation of Liability
+
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE HIVE AND CONTRIBUTORS WILL NOT BE
+LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY ARISING FROM OR RELATED TO THE
+TOOLKIT, WHETHER IN CONTRACT, TORT, OR OTHERWISE.
+
+For commercial redistribution, hosted service use, or other licensing requests,
+contact The Hive for written permission.

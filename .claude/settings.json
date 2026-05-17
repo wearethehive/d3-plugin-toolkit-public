@@ -1,0 +1,51 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/check-python-safety.mjs",
+            "timeout": 5000
+          },
+          {
+            "type": "command",
+            "command": "node scripts/check-kb-coverage.mjs",
+            "timeout": 5000
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/check-python-safety.mjs",
+            "timeout": 5000
+          },
+          {
+            "type": "command",
+            "command": "node scripts/check-kb-coverage.mjs",
+            "timeout": 5000
+          }
+        ]
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/check-python-safety.mjs",
+            "timeout": 5000
+          },
+          {
+            "type": "command",
+            "command": "node scripts/check-kb-coverage.mjs",
+            "timeout": 5000
+          }
+        ]
+      }
+    ]
+  }
+}

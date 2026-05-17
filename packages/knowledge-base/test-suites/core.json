@@ -1,0 +1,59 @@
+{
+  "name": "Core API Validation",
+  "tests": [
+    {
+      "id": "connection",
+      "expression": "'connected'",
+      "expect": { "ok": true },
+      "description": "Basic connectivity check"
+    },
+    {
+      "id": "guisystem-track",
+      "expression": "guisystem.track",
+      "expect": { "ok": true },
+      "description": "Track access via guisystem (NOT state.track)"
+    },
+    {
+      "id": "resource-manager-global",
+      "expression": "resourceManager",
+      "expect": { "ok": true },
+      "description": "ResourceManager is a global (d3.ResourceManager.get() causes 500)"
+    },
+    {
+      "id": "track-time",
+      "expression": "trackTime()",
+      "expect": { "ok": true },
+      "description": "Playhead time in seconds"
+    },
+    {
+      "id": "project-folder",
+      "expression": "d3.projectPaths.projectFolder",
+      "expect": { "ok": true },
+      "description": "Project folder path"
+    },
+    {
+      "id": "track-layers",
+      "expression": "len(guisystem.track.layers)",
+      "expect": { "ok": true, "type": "int" },
+      "description": "Count layers on current track"
+    },
+    {
+      "id": "track-description",
+      "expression": "guisystem.track.description",
+      "expect": { "ok": true },
+      "description": "Track description (use instead of track.name)"
+    },
+    {
+      "id": "d3-module-types",
+      "expression": "[hasattr(__import__('d3'), t) for t in ['Indirection', 'VideoFile', 'Track', 'ListIndirectionController', 'VideoClip']]",
+      "expect": { "ok": true },
+      "description": "Core types available via import d3 (NOT global d3 object)"
+    },
+    {
+      "id": "all-resources-videofile",
+      "expression": "len(resourceManager.allResources(__import__('d3').VideoFile))",
+      "expect": { "ok": true, "type": "int" },
+      "description": "Count VideoFile resources via import d3"
+    }
+  ]
+}

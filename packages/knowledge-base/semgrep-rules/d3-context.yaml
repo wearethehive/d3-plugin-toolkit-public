@@ -1,0 +1,22 @@
+rules:
+  # ── except Exception in d3 context ──────────────────────────────────────
+  # This rule uses pattern-inside to only fire when `import d3` is present,
+  # matching the regex condition from the frontmatter.
+  - id: d3.except-exception-in-d3
+    patterns:
+      - pattern: |
+          try:
+              ...
+          except Exception:
+              ...
+    message: "except Exception does NOT catch all d3 errors. Some d3 attribute errors bypass Exception. Use bare except: for d3 API calls."
+    languages: [python]
+    severity: WARNING
+    metadata:
+      doc: patterns/bare-except-required.md
+      kb-severity: WARN
+
+  # NOTE: The registerModule + import d3 proximity rule is kept as regex-only
+  # in check-python-safety.mjs because Semgrep cannot express "these two
+  # patterns appear within 200 chars of each other" without complex
+  # pattern-inside chains. The regex fallback handles it.
