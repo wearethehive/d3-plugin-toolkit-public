@@ -35,8 +35,8 @@ on them for behavior. The Codex-facing workflow is this file plus
 - Official Disguise docs plus tested local knowledge base entries outrank
   plausible inference from `d3.pyi`.
 - Before implementation, choose the mandatory operating model from
-  `docs/codex-workflows.md`: Single-Agent Dogfooding for established plugin use,
-  or Orchestrated Structural Work for larger/riskier toolkit changes.
+  `docs/codex-workflows.md`: Single-Agent Plugin Work for established plugin
+  use, or Orchestrated Structural Work for larger/riskier toolkit changes.
 - Orchestrated Structural Work requires explicit role gates and a final
   Knowledge Curator pass. If Codex subagents are not being used, run the same
   gates sequentially in the main agent; do not skip them.
@@ -124,6 +124,6 @@ After any Designer Python discovery, probe, crash, or structural workflow change
 - Important repeated or dangerous discoveries should be proposed for promotion
   to `docs/reference.md`; the user decides.
 - Complete the mandatory knowledge report defined in `docs/codex-workflows.md`:
-  Single-Agent Knowledge Report for dogfooding work, Orchestrated Curator Report
-  for structural work.
+  Single-Agent Knowledge Report for plugin work, Orchestrated Curator Report for
+  structural work.
 

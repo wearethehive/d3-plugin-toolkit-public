@@ -612,6 +612,24 @@ const result = await my_function()
 
 The `director` hostname is extracted from the URL query parameter `?director=`.
 
+### Registered Helper Module Imports
+
+When plugin Python is split across sibling `.py` files, every helper module must
+be imported by the frontend so the Vite loader registers it with Designer.
+Registered modules import each other with the runtime name
+`user_module_<moduleName>`:
+
+```python
+def _helpers():
+    import user_module_helpers as helpers
+    return helpers
+```
+
+The unprefixed module name is not importable in this registered-module context,
+and sibling helper source is not bundled into a consumer module's registration
+payload. See
+`packages/knowledge-base/patterns/registered-python-module-imports.md`.
+
 ### Official Libraries
 - `@disguise-one/designer-pythonapi` — TypeScript + Vite plugin: converts Python API code into JS modules
 - `@disguise-one/vue-liveupdate` — Vue composable for real-time WebSocket read/write of session values

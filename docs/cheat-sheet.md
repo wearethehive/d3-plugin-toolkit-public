@@ -30,6 +30,41 @@ Create/edit `.d3-toolkit.json` in the **repo root** to set where plugin builds o
 When set, every `vite build` outputs to **both** `dist/` and `<deployPath>/<pluginName>/`.
 No separate deploy step needed — `dist/` stays fresh and Designer gets the update.
 
+To deploy every plugin to multiple default projects, use `deployPaths`:
+
+```json
+{
+  "deployPaths": [
+    "D:/d3 Projects/MyProject/plugins",
+    "D:/d3 Projects/BackupProject/plugins"
+  ]
+}
+```
+
+To override the default for one plugin, add a `plugins` entry. Plugin-specific
+paths replace the top-level default for that plugin:
+
+```json
+{
+  "deployPath": "D:/d3 Projects/DefaultProject/plugins",
+  "plugins": {
+    "smartGroups": {
+      "deployPaths": [
+        "D:/d3 Projects/audioProbe/Plugins",
+        "D:/d3 Projects/showFile/Plugins"
+      ]
+    },
+    "timecode-switcher": {
+      "deployPath": "D:/d3 Projects/timecodeRig/Plugins"
+    }
+  }
+}
+```
+
+With that config, new plugins use the top-level default, `smartGroups` deploys
+to both listed project plugin folders, and `timecode-switcher` deploys only to
+its own project plugin folder.
+
 To override the deploy target per-build, set the `D3_PLUGIN_OUT` env var (takes priority):
 
 ```bash

@@ -27,12 +27,12 @@ Claude local settings.
 Before implementation, Codex must choose one of two operating models and say
 which one is being used when the choice is not obvious.
 
-### Model A: Single-Agent Dogfooding
+### Model A: Single-Agent Plugin Work
 
 Use this for established plugin work where the toolkit is being used the way a
 normal public user would use it:
 
-- Building, testing, or dogfooding an existing plugin.
+- Building, testing, or maintaining an existing plugin.
 - Small UI or TypeScript changes inside one plugin.
 - Applying a known Designer Python pattern from the knowledge base without
   changing the pattern.
@@ -230,9 +230,9 @@ Required output:
 
 ## Workflow Templates
 
-### Established Plugin Dogfooding
+### Established Plugin Work
 
-Model: Single-Agent Dogfooding.
+Model: Single-Agent Plugin Work.
 
 1. Identify the plugin and affected surface.
 2. Read only the relevant docs and KB entries.
@@ -243,7 +243,7 @@ Model: Single-Agent Dogfooding.
 ### New Plugin From User Prompt
 
 Model: Orchestrated Structural Work when the plugin touches Designer Python or
-unfamiliar Designer behavior; otherwise Single-Agent Dogfooding is acceptable
+unfamiliar Designer behavior; otherwise Single-Agent Plugin Work is acceptable
 for a frontend-only/static plugin.
 
 1. Toolkit Engineer: read `docs/cheat-sheet.md` and scaffold with

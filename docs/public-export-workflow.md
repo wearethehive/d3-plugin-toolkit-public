@@ -68,6 +68,9 @@ The script is whitelist-based. It copies:
 It does not copy:
 
 - private plugin workspaces from `packages/plugins`
+- private helper capsules from `packages/private-helpers`
+- private helper architecture notes such as
+  `docs/private-helper-architecture.md`
 - raw `packages/knowledge-base/reference-tools` probe scripts
 - private legacy utility scripts
 - `.claude/settings.local.json`, local settings, or `.d3-toolkit.json`

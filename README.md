@@ -13,48 +13,22 @@ This public repository contains the toolkit, shared utilities, scaffold template
 - Disguise Designer for live API execution and plugin testing
 - Python available as `python3` when building plugins that use `@disguise-one/designer-pythonapi`
 
-## First-Time Quick Start
-
-Run these commands from the toolkit root folder, the folder that contains this
-`package.json` file. For example, after unzipping the toolkit:
-
-```powershell
-cd C:\path\to\d3-plugin-toolkit-public
-```
-
-Install dependencies and build the toolkit CLI:
+## Setup
 
 ```bash
 npm install
 npm run build:shared
 npm run build:cli
+npm test
 ```
 
-Then create your first plugin:
+## Create a Plugin
 
 ```bash
 npm run cli -- scaffold my-plugin --title "My Plugin"
 npm install
 npm -w packages/plugins/my-plugin run dev
 ```
-
-The scaffold command creates `packages/plugins/my-plugin/` inside this toolkit
-workspace. Run the second `npm install` after scaffolding so npm registers the
-new plugin workspace.
-
-Optional toolkit check:
-
-```bash
-npm test
-```
-
-### If `npm run cli` cannot find `packages/cli/dist/index.js`
-
-That means the CLI has not been built yet, or the command was run from outside
-the toolkit root. Run `npm run build:shared` and `npm run build:cli` from the
-toolkit root, then retry the scaffold command.
-
-## Build a Plugin
 
 Build the plugin for Designer:
 
@@ -71,6 +45,24 @@ For the smoothest local workflow, create `.d3-toolkit.json` in the repo root and
 ```json
 {
   "deployPath": "D:/d3 Projects/MyProject/plugins"
+}
+```
+
+You can also use `deployPaths` for multiple default projects, or
+`plugins.<pluginName>.deployPath(s)` for per-plugin overrides. Plugin-specific
+paths replace the top-level default for that plugin:
+
+```json
+{
+  "deployPath": "D:/d3 Projects/DefaultProject/plugins",
+  "plugins": {
+    "my-plugin": {
+      "deployPaths": [
+        "D:/d3 Projects/ProjectA/plugins",
+        "D:/d3 Projects/ProjectB/plugins"
+      ]
+    }
+  }
 }
 ```
 
@@ -102,41 +94,25 @@ at the start of the session:
 ```text
 You are helping me build a Disguise Designer plugin with d3-plugin-toolkit.
 
-First inspect this repo and read the assistant workflow files that apply to you:
-AGENTS.md and docs/codex-workflows.md for Codex, or CLAUDE.md and .claude/
-for Claude Code. Also read docs/cheat-sheet.md before assuming CLI commands.
+First read the assistant workflow files for your agent: Codex uses AGENTS.md,
+docs/codex-workflows.md, and docs/cheat-sheet.md; Claude uses CLAUDE.md,
+.claude/, and docs/cheat-sheet.md.
 
-Do not require me to know the repo structure. If I describe a plugin in plain
-language, choose a sensible plugin slug/title, scaffold it with:
+If I describe a plugin in plain language, choose a sensible slug/title, scaffold
+it with `npm run cli -- scaffold <plugin-name> --title "<Plugin Title>"`, then
+run `npm install`.
 
-npm run cli -- scaffold <plugin-name> --title "<Plugin Title>"
+Keep UI in Vue/TypeScript and Designer behavior in plugin `.py` modules with
+`__all__` exports. Before touching Designer Python, follow the repo safety
+pre-flight, search the knowledge base/probes, confirm API names, and probe
+unproven behavior.
 
-Then run npm install so the new workspace is registered. Keep UI code in
-Vue/TypeScript, keep Designer behavior in plugin .py modules with __all__
-exports, and call those Python modules through the existing Designer Python API
-integration. Preserve Vite's Designer assumptions, including base: './' and
-single-chunk output.
+Designer Python is Python 2.7 and crash-prone: no f-strings, import d3 inside
+registered functions, use injected resourceManager, use bare except: around
+Designer API calls, avoid unknown proxy iteration, and return JSON-safe values.
 
-Before writing or changing any Python that touches Designer, do the safety
-pre-flight: read docs/mandatory-workflow.md, read the relevant docs/reference.md
-sections, search packages/knowledge-base for proven patterns and known bugs, and
-grep packages/shared/d3.pyi only to confirm method/property names. Do not invent
-Designer API names. If behavior is not proven, write and run a focused probe or
-test through the CLI before implementing.
-
-Remember that Designer Python is Python 2.7: no f-strings. Put import d3 inside
-function bodies for registered plugin modules, use the injected resourceManager
-global, use bare except: around Designer API calls, avoid direct iteration of
-unknown d3 proxy collections, and return JSON-safe values to TypeScript.
-
-Verify with the smallest meaningful command: npm -w packages/plugins/<plugin>
-run build for plugin work; npm run build:cli, npm run build:shared, or npm test
-for toolkit/shared changes; and CLI probes/tests/session snapshots for live
-Designer behavior when available. If Designer is unavailable, say exactly what
-could not be verified.
-
-Finish with what changed, which files were touched, how I can test it, and any
-verification gaps.
+Verify with the smallest meaningful build/test/probe. Finish with what changed,
+files touched, how to test it, and any verification gaps.
 ```
 
 ## Designer Python Safety
