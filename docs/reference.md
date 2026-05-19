@@ -584,12 +584,33 @@ Plugins are HTML frontends running in Designer's embedded Chromium (CEF) browser
   - `window.resizeTo()` does not work in Designer CEF; Designer owns the OS frame.
   - `window.confirm()` always returns `false` in Designer CEF; use inline two-stage button confirmation instead.
   - See `packages/knowledge-base/patterns/plugin-window-sizing.md`.
+- Launcher icon: Designer requests `icon.svg` from the plugin web root. In
+  Vite plugins, place it at `public/icon.svg` so the build copies it to
+  `dist/icon.svg`; app header logos can still be imported from `src/assets/`.
 - Discovery: Designer scans project `Plugins/` folder and shared `common/plugins/`. Project-specific overrides common plugins with same name.
 - Theming: Use `@media (prefers-color-scheme: light)` for dark mode. Transparent backgrounds (`rgba(0,0,0,0)`) inherit Designer's blurred aesthetic.
 
 ### Build Requirements (Vue 3 + Vite)
 - `base: './'` in vite config — required for Designer
 - Single-chunk output — no code splitting (CEF compatibility)
+
+### LiveUpdate Notes
+- Prefer LiveUpdate subscriptions for realtime read state; use Python exec for
+  bootstrap, commands, and data that LiveUpdate cannot expose directly.
+- For resources whose names contain spaces, use hex UID object paths such as
+  `getByUID(0x...)`; path-derived names like `track:track 1` can fail with
+  `UnexpectedToken`.
+- Do not subscribe to large `.uid` properties through LiveUpdate. Capture UID
+  strings during Python bootstrap and build `getByUID(0x...)` paths there.
+- Indexed collection paths can be used as mutation signals. A
+  `propertyPathError` changing to a value, or a value changing to
+  `propertyPathError`, is an event-driven topology change rather than polling.
+- Do not treat LiveUpdate `module.mapping` paths as authoritative for
+  keyframed layer mapping membership. Sample the layer's `mapping`
+  `FieldSequence` in Python and use live `player.tRender` to select the
+  current sample.
+- See `packages/knowledge-base/patterns/multitransport-live-surface-stack.md`
+  and `packages/knowledge-base/patterns/liveupdate-subscribe.md`.
 
 ### Python Execution in Plugins
 

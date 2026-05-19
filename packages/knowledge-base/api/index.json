@@ -169,6 +169,12 @@
     "testedDate": "2026-05-03"
   },
   {
+    "file": "patterns/multitransport-live-surface-stack.md",
+    "status": "observed",
+    "pattern": "multitransport-live-surface-stack",
+    "testedDate": "2026-05-19"
+  },
+  {
     "file": "patterns/notch-module-enumeration.md",
     "status": "needs-live-probe",
     "pattern": "notch-module-enumeration"

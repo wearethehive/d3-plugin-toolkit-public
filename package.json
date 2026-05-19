@@ -1,6 +1,6 @@
 {
   "name": "d3-plugin-toolkit",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "license": "LicenseRef-HiveSchool-Source-Available-1.0",
   "description": "Toolkit for building Disguise Designer plugins with Vue, Vite, TypeScript, and guarded Designer Python workflows.",
@@ -21,7 +21,11 @@
     "dev:cli": "npm run build:cli --silent && node packages/cli/dist/index.js",
     "generate:kb-mcp-index": "node scripts/generate-kb-mcp-index.mjs",
     "mcp:kb": "node packages/kb-mcp/dist/index.js",
+    "release:bump": "node scripts/release-bump.mjs",
+    "release:build": "node scripts/release-prepare.mjs",
     "release:prepare": "node scripts/release-prepare.mjs",
+    "release:publish": "node scripts/release-publish.mjs",
+    "release:push": "node scripts/release-push.mjs",
     "test": "vitest run"
   },
   "engines": {

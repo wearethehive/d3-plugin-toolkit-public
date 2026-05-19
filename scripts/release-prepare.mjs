@@ -3,8 +3,8 @@
 /**
  * Prepare generated public release surfaces from the private source repo.
  *
- * This intentionally stops before git commit, git push, or npm publish. Those
- * review and release steps stay manual.
+ * This intentionally stops before git commit, git push, or npm publish. Use
+ * release:push and release:publish after reviewing the generated diffs.
  */
 
 import { existsSync } from "fs";
@@ -94,18 +94,9 @@ function main() {
   run("git", ["status", "--short", "--branch"], mcpTarget);
 
   console.log("");
-  console.log("Release preparation complete. Review generated diffs, then commit/push manually.");
-  console.log(`  cd "${toolkitTarget}"`);
-  console.log("  git diff --stat");
-  console.log("  git add .");
-  console.log('  git commit -m "Release public toolkit"');
-  console.log("  git push origin master");
-  console.log("");
-  console.log(`  cd "${mcpTarget}"`);
-  console.log("  git diff --stat");
-  console.log("  git add .");
-  console.log('  git commit -m "Release KB MCP"');
-  console.log("  git push origin main");
+  console.log("Release preparation complete. Review generated diffs, then run:");
+  console.log("  npm run release:push");
+  console.log("  npm run release:publish");
 }
 
 function parseArgs(argv) {
@@ -200,7 +191,9 @@ function section(title) {
 }
 
 function printHelp() {
-  console.log(`Usage: npm run release:prepare -- [options]
+  console.log(`Usage: npm run release:build -- [options]
+
+Alias: npm run release:prepare -- [options]
 
 Runs the private-to-public release preparation flow:
   1. Private npm ci/build/test

@@ -34,6 +34,13 @@ http://director.local:80/projects/project-name/plugins/plugin-name/icon.svg,
 using fallback, http://director.local/js/plugin-launcher.js:17
 ```
 
+That log line also confirms the local plugin launcher icon convention:
+Designer requests `icon.svg` from the plugin web root. In Vite plugins, put the
+launcher icon at `public/icon.svg` so the build copies it to `dist/icon.svg`
+and the deployed plugin exposes `/plugins/<plugin-name>/icon.svg`. Header logos
+used inside the Vue app can still live under `src/assets/` and be imported by
+the component.
+
 ### How to read it
 
 1. Locate Designer's log file (typically streams to a console window when
