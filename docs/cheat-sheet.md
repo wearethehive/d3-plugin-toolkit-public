@@ -213,6 +213,24 @@ Shows what changed between the last two snapshots (resource counts, layers, etc.
 
 ---
 
+## Run Knowledge Base MCP
+
+```bash
+npm run build:mcp
+npm run mcp:kb
+```
+
+Runs the read-only MCP server for KB search, entry retrieval, related entries,
+and bounded context packs. See `docs/kb-mcp.md`.
+
+Standalone users can run:
+
+```bash
+npx @hiveschool/d3-kb-mcp
+```
+
+---
+
 ## Common Workflows
 
 ### Start a new plugin from scratch

@@ -132,12 +132,6 @@
     "testedDate": "2026-03-17"
   },
   {
-    "file": "patterns/insert-audio-beats-section-extension.md",
-    "status": "confirmed",
-    "pattern": "insert-audio-beats-section-extension",
-    "testedDate": "2026-05-15"
-  },
-  {
     "file": "patterns/layer-field-discovery-and-update.md",
     "status": "observed",
     "pattern": "layer-field-discovery-and-update",
@@ -228,13 +222,6 @@
     "testedDate": "2026-04-07"
   },
   {
-    "file": "patterns/smartgroups-sequential-media-build.md",
-    "status": "confirmed",
-    "pattern": "smartgroups-sequential-media-build",
-    "testedDate": "2026-05-16",
-    "designerVersion": "r32.4.3.247061"
-  },
-  {
     "file": "patterns/stage-screen-and-projection-setup.md",
     "status": "observed",
     "pattern": "stage-screen-and-projection-setup",
@@ -252,12 +239,6 @@
     "status": "confirmed",
     "pattern": "timecode-transport-ltc-lifecycle",
     "testedDate": "2026-04-07"
-  },
-  {
-    "file": "patterns/timeline-duration-conversion.md",
-    "status": "confirmed",
-    "pattern": "timeline-duration-conversion",
-    "testedDate": "2026-05-16"
   },
   {
     "file": "patterns/timeline-export-cues.md",
@@ -530,13 +511,6 @@
     "bug": "state-track-crash",
     "severity": "crash",
     "testedDate": "2026-03-15"
-  },
-  {
-    "file": "bugs/track-activate-duplicates-setlist-ui.md",
-    "status": "confirmed",
-    "bug": "track-activate-duplicates-setlist-ui",
-    "severity": "warning",
-    "testedDate": "2026-05-16"
   },
   {
     "file": "bugs/videofile-description-no-extension.md",
