@@ -16,8 +16,11 @@ on them for behavior. The Codex-facing workflow is this file plus
   templates, Google Sheets helpers, and `d3.pyi`.
 - `packages/knowledge-base/` - tested patterns, known bugs, reference probes,
   test suites, and session/test logs.
-- `packages/plugins/` - plugin workspaces.
-- `templates/plugin/` - scaffold source for new Vue/Vite plugins.
+- `packages/plugins/` - local plugin workspaces.
+- `packages/remote-plugins/` - remote plugin workspaces.
+- `templates/plugin/` - scaffold source for new local Vue/Vite plugins.
+- `templates/remote-plugin-python/` and `templates/remote-plugin-node/` -
+  scaffold sources for remote plugins.
 - `docs/reference.md` - Designer API notes, Python rules, known crashers, and
   plugin architecture.
 - `docs/mandatory-workflow.md` - required workflow before Designer API changes.
@@ -68,25 +71,40 @@ Critical Python rules:
 
 ## New Plugin Requests
 
-When asked to create a Disguise plugin from a prompt, do not hand-build the
+When asked to create a Disguise plugin from a prompt, first decide whether the
+request calls for a local/internal plugin or a remote plugin. Local plugins live
+inside a Designer project/common plugin folder. Remote plugins are standalone
+frontend/backend apps discovered by Designer via DNS-SD. Do not hand-build the
 workspace structure. Use the toolkit as the public user would:
 
 1. Read `docs/cheat-sheet.md` for current CLI commands.
-2. Create the plugin with `npm run cli -- scaffold <plugin-name> --title "..."`
-   unless the plugin already exists.
-3. Run `npm install` after scaffolding so the new workspace is registered.
-4. Put Designer behavior in plugin `.py` modules with `__all__` exports, and
+2. Create a local plugin with
+   `npm run cli -- scaffold <plugin-name> -- --title "..."` unless the plugin
+   already exists.
+3. Create a remote plugin with
+   `npm run cli -- scaffold <plugin-name> -- --type remote --backend python --title "..."`
+   or `--backend node`. Use Python first when there is no strong reason to
+   choose Node, because the official `designer-plugin` library is the proven
+   DNS-SD publishing path.
+4. Run `npm install` after scaffolding so the new workspace is registered.
+5. Put Designer behavior in plugin `.py` modules with `__all__` exports, and
    call those modules from Vue/TypeScript.
-5. Before using any Designer API, search the KB and reference probes first:
+6. For remote plugins, keep backend service code separate from any Python that
+   is executed inside Designer. External backend Python may use `# d3-check:
+   external-python`; Designer-executed payloads still need the full Designer
+   Python pre-flight.
+7. Before using any Designer API, search the KB and reference probes first:
    `packages/knowledge-base/patterns/`, `bugs/`, and `reference-tools/`.
-6. If behavior is not proven, run a focused probe against live Designer with the
+8. If behavior is not proven, run a focused probe against live Designer with the
    CLI, for example `npm run cli -- exec --file <probe.py>`, `npm run cli --
    test "<expr>"`, or a purpose-built test suite. Use broad `npm run cli --
    probe <target> --unsafe-dir` only in disposable sessions.
-7. Capture live-context changes when useful with `npm run cli -- session
+9. Capture live-context changes when useful with `npm run cli -- session
    snapshot` before and after the work, then `npm run cli -- session diff`.
-8. Build with `npm -w packages/plugins/<plugin> run build`.
-9. Record new Designer findings through the KB/test-log/session-log workflow.
+10. Build local plugins with `npm -w packages/plugins/<plugin> run build`.
+    Verify remote plugins with `npm run cli -- remote smoke <plugin>` and
+    `npm run cli -- remote build <plugin>`.
+11. Record new Designer findings through the KB/test-log/session-log workflow.
 
 ## Frontend Rules
 
@@ -106,7 +124,9 @@ Use the smallest meaningful verification for the change:
 
 - Toolkit/shared changes: `npm run build:cli`, `npm run build:shared`, and/or
   `npm run test`.
-- Plugin changes: `npm -w packages/plugins/<plugin> run build`.
+- Local plugin changes: `npm -w packages/plugins/<plugin> run build`.
+- Remote plugin changes: `npm run cli -- remote smoke <plugin>` and
+  `npm run cli -- remote build <plugin>`.
 - Designer Python behavior: run a probe or test suite against Designer when
   available, and document the result.
 

@@ -3,27 +3,21 @@ import fsExtra from 'fs-extra'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import chalk from 'chalk'
+import {
+  findRepoRoot,
+  pluginDirForKind,
+  validatePluginKind,
+  validateRemoteBackend,
+  type PluginKind,
+  type RemoteBackend,
+} from '../plugin-workspace.js'
 
 const { ensureDir, pathExists, readdir, readFile, writeFile } = fsExtra
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
-const TEMPLATE_DIR = join(__dirname, '../../../../templates/plugin')
-
-/** Walk up from cwd until we find the repo root (has packages/cli and packages/shared). */
-async function findRepoRoot(from: string): Promise<string> {
-  let dir = from
-  while (true) {
-    if (
-      await pathExists(join(dir, 'packages', 'cli')) &&
-      await pathExists(join(dir, 'packages', 'shared'))
-    ) {
-      return dir
-    }
-    const parent = dirname(dir)
-    if (parent === dir) throw new Error('Could not find repo root (no packages/cli + packages/shared ancestor)')
-    dir = parent
-  }
-}
+const LOCAL_TEMPLATE_DIR = join(__dirname, '../../../../templates/plugin')
+const REMOTE_PYTHON_TEMPLATE_DIR = join(__dirname, '../../../../templates/remote-plugin-python')
+const REMOTE_NODE_TEMPLATE_DIR = join(__dirname, '../../../../templates/remote-plugin-node')
 
 interface TemplateVars {
   pluginName: string
@@ -31,6 +25,7 @@ interface TemplateVars {
   description: string
   width: string
   height: string
+  backend: string
 }
 
 async function copyDir(src: string, dest: string, vars: TemplateVars): Promise<void> {
@@ -64,19 +59,28 @@ function replaceVars(content: string, vars: TemplateVars): string {
     .replace(/\{\{description\}\}/g, vars.description)
     .replace(/\{\{width\}\}/g, vars.width)
     .replace(/\{\{height\}\}/g, vars.height)
+    .replace(/\{\{backend\}\}/g, vars.backend)
+}
+
+function templateDirFor(kind: PluginKind, backend: RemoteBackend): string {
+  if (kind === 'local') return LOCAL_TEMPLATE_DIR
+  return backend === 'node' ? REMOTE_NODE_TEMPLATE_DIR : REMOTE_PYTHON_TEMPLATE_DIR
 }
 
 export const scaffoldCommand = new Command('scaffold')
   .description('Create a new plugin from template')
   .argument('<name>', 'Plugin name (kebab-case, e.g., my-plugin)')
+  .option('--type <type>', 'Plugin type: local or remote', 'local')
+  .option('--backend <backend>', 'Remote backend: python or node', 'python')
   .option('--title <title>', 'Plugin display title')
   .option('--description <desc>', 'Plugin description', 'A Disguise Designer plugin')
   .option('--width <n>', 'Plugin window width', '800')
   .option('--height <n>', 'Plugin window height', '600')
-  .action(async (name: string, opts: { title?: string; description: string; width: string; height: string }) => {
+  .action(async (name: string, opts: { type: string; backend: string; title?: string; description: string; width: string; height: string }) => {
     const repoRoot = await findRepoRoot(process.cwd())
-    const pluginsDir = join(repoRoot, 'packages', 'plugins')
-    const targetDir = join(pluginsDir, name)
+    const kind = validatePluginKind(opts.type)
+    const backend = validateRemoteBackend(opts.backend)
+    const targetDir = pluginDirForKind(repoRoot, name, kind)
 
     if (await pathExists(targetDir)) {
       console.error(chalk.red(`Plugin already exists: ${targetDir}`))
@@ -84,6 +88,12 @@ export const scaffoldCommand = new Command('scaffold')
     }
 
     const title = opts.title || name.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
+    const templateDir = templateDirFor(kind, backend)
+
+    if (!(await pathExists(templateDir))) {
+      console.error(chalk.red(`Template not found: ${templateDir}`))
+      return
+    }
 
     const vars: TemplateVars = {
       pluginName: name,
@@ -91,15 +101,23 @@ export const scaffoldCommand = new Command('scaffold')
       description: opts.description,
       width: opts.width,
       height: opts.height,
+      backend,
     }
 
-    console.log(chalk.cyan(`Scaffolding plugin: ${name}`))
-    await copyDir(TEMPLATE_DIR, targetDir, vars)
+    console.log(chalk.cyan(`Scaffolding ${kind} plugin: ${name}`))
+    await copyDir(templateDir, targetDir, vars)
 
-    console.log(chalk.green(`Created plugin at packages/plugins/${name}/`))
+    const workspacePath = kind === 'remote' ? `packages/remote-plugins/${name}/` : `packages/plugins/${name}/`
+    console.log(chalk.green(`Created plugin at ${workspacePath}`))
     console.log()
     console.log(chalk.gray('Next steps:'))
     console.log(chalk.white('  npm install'))
-    console.log(chalk.white(`  npm -w packages/plugins/${name} run dev`))
-    console.log(chalk.white(`  npm -w packages/plugins/${name} run build`))
+    if (kind === 'remote') {
+      console.log(chalk.white(`  npm run cli -- remote dev ${name}`))
+      console.log(chalk.white(`  npm run cli -- remote smoke ${name}`))
+      console.log(chalk.white(`  npm run cli -- remote package ${name}`))
+    } else {
+      console.log(chalk.white(`  npm -w packages/plugins/${name} run dev`))
+      console.log(chalk.white(`  npm -w packages/plugins/${name} run build`))
+    }
   })

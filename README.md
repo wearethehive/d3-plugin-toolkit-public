@@ -2,9 +2,9 @@
 
 ![d3 Plugin Toolkit Workflow](docs/assets/d3-plugin-toolkit-workflow.png)
 
-Toolkit for building local Disguise Designer plugins with Vue 3, Vite, TypeScript, and Designer Python safety checks.
+Toolkit for building local and remote Disguise Designer plugins with Vue 3, Vite, TypeScript, and Designer Python safety checks.
 
-This public repository contains the toolkit, shared utilities, scaffold template, documentation, and curated knowledge base. It does not contain private plugin workspaces.
+This public repository contains the toolkit, shared utilities, scaffold templates, documentation, and curated knowledge base. It does not contain private plugin workspaces.
 
 ## Requirements
 
@@ -22,10 +22,10 @@ npm run build:cli
 npm test
 ```
 
-## Create a Plugin
+## Create a Local Plugin
 
 ```bash
-npm run cli -- scaffold my-plugin --title "My Plugin"
+npm run cli -- scaffold my-plugin -- --title "My Plugin"
 npm install
 npm -w packages/plugins/my-plugin run dev
 ```
@@ -38,9 +38,31 @@ npm -w packages/plugins/my-plugin run build
 
 The build output goes to `packages/plugins/my-plugin/dist/`. Copy that folder into a Designer project plugin folder, or configure `.d3-toolkit.json` as described in `docs/cheat-sheet.md`.
 
+## Create a Remote Plugin
+
+```bash
+npm run cli -- scaffold my-remote -- --type remote --backend python --title "My Remote"
+npm install
+npm run cli -- remote dev my-remote
+```
+
+Remote plugins scaffold into `packages/remote-plugins/<name>/`. The Python
+backend uses Disguise's official `designer-plugin` library for DNS-SD
+publishing. The Node backend is also available with `--backend node`; it uses a
+Node service plus a small Python publisher sidecar. Remote v1 packaging is
+Windows-first and creates a distributable folder rather than an installer:
+
+```bash
+npm run cli -- remote smoke my-remote
+npm run cli -- remote build my-remote
+npm run cli -- remote package my-remote
+```
+
 ## Configure Designer Deploy Path
 
-For the smoothest local workflow, create `.d3-toolkit.json` in the repo root and point it at the `plugins` folder inside your Designer project:
+For the smoothest local workflow, start from `.d3-toolkit.example.json` in the
+repo root, create your local `.d3-toolkit.json`, and point it at the
+`plugins` folder inside your Designer project:
 
 ```json
 {
@@ -81,7 +103,7 @@ For a one-off deploy without `.d3-toolkit.json`, build first and then copy the b
 
 ```bash
 npm -w packages/plugins/my-plugin run build
-npm run cli -- deploy my-plugin --project "D:/d3 Projects/MyProject"
+npm run cli -- deploy my-plugin -- --project "D:/d3 Projects/MyProject"
 ```
 
 The manual deploy command copies to `<project>/Plugins/my-plugin/`. See `docs/cheat-sheet.md` for more deployment options, including the `D3_PLUGIN_OUT` per-build override.
@@ -98,9 +120,10 @@ First read the assistant workflow files for your agent: Codex uses AGENTS.md,
 docs/codex-workflows.md, and docs/cheat-sheet.md; Claude uses CLAUDE.md,
 .claude/, and docs/cheat-sheet.md.
 
-If I describe a plugin in plain language, choose a sensible slug/title, scaffold
-it with `npm run cli -- scaffold <plugin-name> --title "<Plugin Title>"`, then
-run `npm install`.
+If I describe a plugin in plain language, choose whether it should be local or
+remote. Scaffold local plugins with `npm run cli -- scaffold <plugin-name> -- --title "<Plugin Title>"`.
+Scaffold remote plugins with `npm run cli -- scaffold <plugin-name> -- --type remote --backend python --title "<Plugin Title>"`
+unless I ask for a Node backend. Then run `npm install`.
 
 Keep UI in Vue/TypeScript and Designer behavior in plugin `.py` modules with
 `__all__` exports. Before touching Designer Python, follow the repo safety

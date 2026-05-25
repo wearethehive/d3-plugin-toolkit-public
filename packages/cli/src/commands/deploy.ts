@@ -2,6 +2,7 @@ import { Command } from 'commander'
 import fsExtra from 'fs-extra'
 import { join } from 'path'
 import chalk from 'chalk'
+import { findPluginWorkspace, findRepoRoot } from '../plugin-workspace.js'
 
 const { copy, ensureDir, pathExists, readdir } = fsExtra
 
@@ -33,10 +34,27 @@ export const deployCommand = new Command('deploy')
   .argument('<plugin>', 'Plugin name (from packages/plugins/)')
   .requiredOption('--project <path>', 'Path to Designer project folder')
   .action(async (plugin: string, opts: { project: string }) => {
-    const distDir = join(process.cwd(), 'packages', 'plugins', plugin, 'dist')
+    const repoRoot = await findRepoRoot(process.cwd())
+    const workspace = await findPluginWorkspace(repoRoot, plugin)
+
+    if (!workspace) {
+      console.error(chalk.red(`Plugin not found: ${plugin}`))
+      process.exitCode = 1
+      return
+    }
+
+    if (workspace.kind === 'remote') {
+      console.error(chalk.red(`Cannot deploy remote plugin "${plugin}" to a project Plugins folder.`))
+      console.error(chalk.gray(`Use: npm run cli -- remote dev ${plugin}`))
+      process.exitCode = 1
+      return
+    }
+
+    const distDir = join(workspace.dir, 'dist')
 
     if (!(await pathExists(distDir))) {
       console.error(chalk.red(`No dist/ found. Build first: npm -w packages/plugins/${plugin} run build`))
+      process.exitCode = 1
       return
     }
 

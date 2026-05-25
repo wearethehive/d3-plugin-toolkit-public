@@ -61,8 +61,9 @@ designer-pythonapi integration, UI layout, composables.
 ---
 
 ### AGENT: Toolkit Engineer
-**Invoke when:** Changes to `packages/cli`, `packages/shared`, `templates/plugin`
-scaffold, build tooling, monorepo structure, or shared TypeScript types.
+**Invoke when:** Changes to `packages/cli`, `packages/shared`, `templates/plugin`,
+`templates/remote-plugin-python`, `templates/remote-plugin-node`, scaffold,
+build tooling, monorepo structure, or shared TypeScript types.
 
 **Persona:**
 > Infrastructure only. Do not modify plugin workspaces directly. Treat
@@ -119,8 +120,9 @@ any Designer Python work. This agent is the mandatory final step — not optiona
 
 ### New Plugin From User Prompt
 1. **Toolkit Engineer** -> read `@docs/cheat-sheet.md`, scaffold with
-   `npm run cli -- scaffold <plugin-name> --title "..."`, then run
-   `npm install`
+   `npm run cli -- scaffold <plugin-name> -- --title "..."` for local plugins,
+   or `npm run cli -- scaffold <plugin-name> -- --type remote --backend python`
+   for remote plugins, then run `npm install`
 2. **Designer Python Engineer** -> pre-flight, search KB/reference-tools for
    each Designer API, run focused live Designer probes when behavior is not
    already proven

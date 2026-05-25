@@ -1,0 +1,5 @@
+{
+  "kind": "local",
+  "name": "{{pluginName}}",
+  "title": "{{title}}"
+}

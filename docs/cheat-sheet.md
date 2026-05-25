@@ -5,6 +5,13 @@ All commands assume you're in the repo root (`d3-plugin-toolkit/`).
 **Shorthand used below:**
 - `d3` = `npm run cli --` (built CLI) or `npm run dev:cli --` (dev mode, no build needed)
 
+When passing option flags through `npm run cli` on Windows, put a second `--`
+before the flags:
+
+```bash
+npm run cli -- scaffold my-plugin -- --title "My Plugin"
+```
+
 ---
 
 ## First-Time Setup
@@ -19,7 +26,9 @@ npm run build:cli          # build the CLI
 
 ## Configure Deploy Path (`.d3-toolkit.json`)
 
-Create/edit `.d3-toolkit.json` in the **repo root** to set where plugin builds output to:
+The public repo includes `.d3-toolkit.example.json` with a placeholder Designer
+project path. Use it as the starting point for a local `.d3-toolkit.json` in the
+**repo root** to set where plugin builds output to:
 
 ```json
 {
@@ -75,10 +84,12 @@ D3_PLUGIN_OUT="C:/other/path/my-plugin" npm -w packages/plugins/my-plugin run bu
 
 ## Scaffold a New Plugin
 
+### Local Plugin
+
 ```bash
 npm run cli -- scaffold my-plugin
-npm run cli -- scaffold my-plugin --title "My Plugin" --width 1024 --height 768
-npm run cli -- scaffold my-plugin --description "Does cool stuff" --width 400 --height 300
+npm run cli -- scaffold my-plugin -- --title "My Plugin" --width 1024 --height 768
+npm run cli -- scaffold my-plugin -- --description "Does cool stuff" --width 400 --height 300
 ```
 
 Creates `packages/plugins/my-plugin/` from the template. After scaffolding:
@@ -86,6 +97,25 @@ Creates `packages/plugins/my-plugin/` from the template. After scaffolding:
 ```bash
 npm install                # register the new workspace
 ```
+
+### Remote Plugin
+
+```bash
+npm run cli -- scaffold my-remote -- --type remote --backend python --title "My Remote"
+npm run cli -- scaffold my-node-remote -- --type remote --backend node --title "My Node Remote"
+```
+
+Creates `packages/remote-plugins/<plugin>/` from a remote template. After
+scaffolding:
+
+```bash
+npm install
+```
+
+Remote v1 is Windows-first and does not generate an installer. The Python
+backend uses the official `designer-plugin` library for DNS-SD publishing. The
+Node backend uses a Node service plus a small Python publisher sidecar for the
+same official publishing path.
 
 ---
 
@@ -112,10 +142,37 @@ Starts Vite dev server with hot module replacement.
 ## Deploy a Built Plugin to a Designer Project
 
 ```bash
-npm run cli -- deploy my-plugin --project "D:/d3 Projects/MyProject"
+npm run cli -- deploy my-plugin -- --project "D:/d3 Projects/MyProject"
 ```
 
 Copies `dist/` contents to `<project>/Plugins/my-plugin/`. Build first.
+This is for local plugins only. Remote plugins publish themselves with DNS-SD
+and should use the remote commands below.
+
+---
+
+## Remote Plugin Commands
+
+```bash
+npm run cli -- remote dev my-remote
+npm run cli -- remote build my-remote
+npm run cli -- remote smoke my-remote
+npm run cli -- remote smoke my-remote -- --server
+npm run cli -- remote smoke my-remote -- --server --designer --dnssd
+npm run cli -- remote package my-remote
+```
+
+- `remote dev` starts the frontend, backend, and DNS-SD publisher.
+- `remote build` builds the frontend.
+- `remote smoke` validates generated config and template files.
+- `remote smoke --server` also checks a running backend health endpoint.
+- `remote smoke --designer` also checks backend connectivity to Designer's
+  execution API.
+- `remote smoke --dnssd` also checks for the running `_d3plugin._tcp.local`
+  DNS-SD advertisement. It uses Python `zeroconf`, installed with
+  `designer-plugin`.
+- `remote package` creates a Windows-first distributable folder under
+  `packages/remote-plugins/<plugin>/package/<plugin>/`.
 
 ---
 
@@ -235,15 +292,22 @@ npx @hiveschool/d3-kb-mcp
 
 ### Start a new plugin from scratch
 ```bash
-npm run cli -- scaffold my-plugin --title "My Plugin"
+npm run cli -- scaffold my-plugin -- --title "My Plugin"
 npm install
 npm -w packages/plugins/my-plugin run dev
+```
+
+### Start a new remote plugin
+```bash
+npm run cli -- scaffold my-remote -- --type remote --backend python --title "My Remote"
+npm install
+npm run cli -- remote dev my-remote
 ```
 
 ### Build and deploy
 ```bash
 npm -w packages/plugins/my-plugin run build
-npm run cli -- deploy my-plugin --project "D:/d3 Projects/MyProject"
+npm run cli -- deploy my-plugin -- --project "D:/d3 Projects/MyProject"
 ```
 
 ### Build directly to Designer (skip deploy step)

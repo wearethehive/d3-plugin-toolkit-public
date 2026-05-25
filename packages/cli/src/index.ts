@@ -10,6 +10,7 @@ import { learnCommand } from './commands/learn.js'
 import { discoverCommand } from './commands/discover.js'
 import { sessionCommand } from './commands/session.js'
 import { kbCommand } from './commands/kb.js'
+import { remoteCommand } from './commands/remote.js'
 
 const program = new Command()
   .name('d3')
@@ -26,5 +27,6 @@ program.addCommand(learnCommand)
 program.addCommand(discoverCommand)
 program.addCommand(sessionCommand)
 program.addCommand(kbCommand)
+program.addCommand(remoteCommand)
 
 program.parse()

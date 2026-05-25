@@ -216,6 +216,12 @@
     "testedDate": "2026-04-08"
   },
   {
+    "file": "patterns/remote-plugin-dnssd-publishing.md",
+    "status": "confirmed",
+    "pattern": "remote-plugin-dnssd-publishing",
+    "testedDate": "2026-05-19"
+  },
+  {
     "file": "patterns/safe-iteration.md",
     "status": "required",
     "pattern": "safe-iteration",

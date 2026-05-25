@@ -571,6 +571,22 @@ Plugins are HTML frontends running in Designer's embedded Chromium (CEF) browser
 - **Local (internal):** Live in `{project_path}/plugins/my-plugin/` or shared `common/plugins/`. Travel with the project. HTTP only — no HTTPS, so secure browser APIs (WebUSB, WebBluetooth, WebHID, clipboard) are unavailable. WebGL disabled by default (enable in Advanced Project Settings).
 - **Remote:** Auto-discovered via DNS-SD (`_d3plugin._tcp.local.`). Separate frontend/backend, managed at appliance level. Support HTTPS, complex server-side processing, cross-session state.
 
+Toolkit workspace split:
+
+- Local plugins scaffold into `packages/plugins/<name>/` and deploy into a
+  Designer project/common plugin folder.
+- Remote plugins scaffold into `packages/remote-plugins/<name>/` and are run
+  with `npm run cli -- remote <dev|build|smoke|package> <name>`.
+- Remote v1 supports Python and Node backend variants. The Python variant uses
+  the official `designer-plugin` publisher directly. The Node variant uses a
+  Node service plus a small Python publisher sidecar so DNS-SD publishing stays
+  on the documented Disguise library path.
+- Live DNS-SD smoke test confirmed `designer-plugin` 1.3.1 publishes
+  `_d3plugin._tcp.local.` with TXT `t=web`, `s=<requiresSession>`, and
+  `d=<isDisguise>`. TXT `u` is only present when `url` is set in
+  `d3plugin.json`. See
+  `packages/knowledge-base/patterns/remote-plugin-dnssd-publishing.md`.
+
 ### Configuration
 - `d3plugin.json` manifest in plugin root (all fields optional):
   - `"name"`: display name
@@ -658,7 +674,9 @@ payload. See
 
 ### Distribution
 - Local plugins auto-distribute with the project folder
-- Remote plugins need standalone installers
+- Remote plugins need explicit distribution. Toolkit v1 packages remote plugins
+  into Windows-first distributable folders/zips; generated installers are a
+  future step.
 - Submit to Plugin Gallery: email `integrations@disguise.one`
 
 ### Guides

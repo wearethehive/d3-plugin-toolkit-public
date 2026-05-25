@@ -1,0 +1,7 @@
+{
+  "kind": "remote",
+  "name": "{{pluginName}}",
+  "title": "{{title}}",
+  "backend": "python",
+  "requiresSession": true
+}

@@ -1,0 +1,11 @@
+{
+  "name": "{{pluginName}}",
+  "title": "{{title}}",
+  "backend": "node",
+  "host": "127.0.0.1",
+  "frontendPort": 5173,
+  "backendPort": 38301,
+  "designerHost": "127.0.0.1",
+  "designerPort": 80,
+  "requiresSession": true
+}

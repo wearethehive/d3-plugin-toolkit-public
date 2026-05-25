@@ -1,6 +1,6 @@
 {
   "name": "@hiveschool/d3-kb-mcp",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Read-only MCP server for the d3-plugin-toolkit knowledge base.",
   "type": "module",
   "bin": {

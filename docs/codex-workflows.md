@@ -46,8 +46,13 @@ change, and complete the Single-Agent Knowledge Report.
 Required toolkit entry points:
 
 - Read `docs/cheat-sheet.md` for current CLI commands.
-- Use `npm run cli -- scaffold <plugin>` for new plugin workspaces.
-- Use `npm -w packages/plugins/<plugin> run build` for plugin verification.
+- Use `npm run cli -- scaffold <plugin>` for new local plugin workspaces.
+- Use `npm run cli -- scaffold <plugin> -- --type remote --backend python`
+  or `--backend node` for new remote plugin workspaces.
+- Use `npm -w packages/plugins/<plugin> run build` for local plugin
+  verification.
+- Use `npm run cli -- remote smoke <plugin>` and
+  `npm run cli -- remote build <plugin>` for remote plugin verification.
 - Use `npm run cli -- exec`, `test`, `test-suite`, `session`, and focused
   reference-tool probes for live Designer validation when Designer behavior is
   involved.
@@ -61,6 +66,7 @@ Use this for larger or riskier work where role separation is load-bearing:
 - Changes to `packages/cli`, `packages/shared`, `templates/plugin`, build
   tooling, public export behavior, hooks, or assistant workflows.
 - Cross-plugin changes or changes that affect future scaffolded plugins.
+- Remote plugin scaffold, backend, packaging, or publishing changes.
 - Knowledge-base schema, curation, test-suite, or reference-doc structure.
 - Any task the user explicitly describes as multi-agent, structural, or
   requiring orchestration.
@@ -134,6 +140,10 @@ Rules:
 - Keep UI state and presentation in Vue/composables.
 - If Python changes are needed, hand them to the Designer Python role rather
   than quietly blending responsibilities.
+- For remote plugins, keep backend service code separate from any Python payload
+  executed inside Designer. External Python can use `# d3-check:
+  external-python`, but Designer-executed payloads still need the full Designer
+  Python pre-flight.
 
 ### Toolkit Engineer
 
@@ -247,7 +257,9 @@ unfamiliar Designer behavior; otherwise Single-Agent Plugin Work is acceptable
 for a frontend-only/static plugin.
 
 1. Toolkit Engineer: read `docs/cheat-sheet.md` and scaffold with
-   `npm run cli -- scaffold <plugin-name> --title "..."`.
+   `npm run cli -- scaffold <plugin-name> -- --title "..."` for local plugins,
+   or `npm run cli -- scaffold <plugin-name> -- --type remote --backend python`
+   for remote plugins.
 2. Designer Python Engineer: search the KB and reference probes for each
    Designer API the plugin needs.
 3. Designer Python Engineer: run focused live Designer probes when behavior is
