@@ -588,10 +588,17 @@ Toolkit workspace split:
   `packages/knowledge-base/patterns/remote-plugin-dnssd-publishing.md`.
 
 ### Configuration
-- `d3plugin.json` manifest in plugin root (all fields optional):
+- Local project plugin `d3plugin.json` manifests should keep the scaffold shape:
   - `"name"`: display name
-  - `"url"`: custom endpoint for web resources
-  - `"requiresSession"`: boolean — whether Designer must have an active session
+  - `"description"`: human-readable summary
+  - `"version"`: plugin version
+  - `"entry": "index.html"`: local plugin entrypoint
+  - `"requiresSession"`: optional boolean — whether Designer must have an active session
+- Do not replace local project plugin `"entry"` with `"url"` unless a live
+  Designer probe has confirmed that exact manifest shape. Remote/DNS-SD plugin
+  `url` metadata is a different plugin type and should not be inferred for
+  local project plugins. See
+  `packages/knowledge-base/patterns/local-project-plugin-manifest-and-preflight.md`.
 - Window meta tags (in `index.html`) set initial size only; Designer saves/restores geometry after first open:
   - `disguise-plugin-window-size` — e.g. `"512,512"` (comma-separated)
   - `disguise-plugin-window-min-size` — e.g. `"200,200"`
@@ -603,7 +610,12 @@ Toolkit workspace split:
 - Launcher icon: Designer requests `icon.svg` from the plugin web root. In
   Vite plugins, place it at `public/icon.svg` so the build copies it to
   `dist/icon.svg`; app header logos can still be imported from `src/assets/`.
-- Discovery: Designer scans project `Plugins/` folder and shared `common/plugins/`. Project-specific overrides common plugins with same name.
+- Discovery: Designer scans project `Plugins/` folder and shared
+  `common/plugins/`. Project-specific overrides common plugins with same name.
+  If invalid local plugin metadata makes Plugin Launcher report no plugins,
+  restoring the file may not be enough; restart all d3 services/processes
+  before trusting discovery again. See
+  `packages/knowledge-base/bugs/local-plugin-discovery-stale-after-invalid-manifest.md`.
 - Theming: Use `@media (prefers-color-scheme: light)` for dark mode. Transparent backgrounds (`rgba(0,0,0,0)`) inherit Designer's blurred aesthetic.
 
 ### Build Requirements (Vue 3 + Vite)

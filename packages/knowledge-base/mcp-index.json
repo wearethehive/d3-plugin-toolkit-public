@@ -635,6 +635,34 @@
     "searchText": "vue-liveupdate Subscriptions Overview Use @disguise-one/vue-liveupdate WebSocket subscriptions for real-time Designer state instead of HTTP polling via designer-pythonapi. Subscriptions push updates at 50ms (default) — frame-accurate with zero polling overhead. Rule of thumb: Read state via liveUpdate.subscribe(). Write/command via Python exec. Setup ``typescript import { useLiveUpdate, LiveUpdateOverlay } from '@disguise-one/vue-liveupdate' // One instance per plugin — share via provide/inject const liveUpdate = useLiveUpdate(endpoint.value) ` Object Path Format Object paths use type:name format derived from the resource path: | Resource Path | Object Path | |---------------|-------------| | objects/transportmanager/default.apx | transportManager:default | | objects/track/track1.apx | track:track1 | | objects/screen/screen2.apx | screen2:surface1 | ⚠️ Object names with spaces are unparseable. A path like track:track 1 (with a space) triggers Live Update Error: Unable to subscribe to object: UnexpectedToken. This was conclusively proven in reference-tools/probelayermoduler32.py after multiple rounds of investigation. The parser tokenises on whitespace and we found no escaping form that worked. Workaround: rename resources to use no spaces (or underscores) — e.g. track 1 → track1. subscribe vs autoSubscribe `typescript // subscribe — you name the keys const { tRender, isPlaying } = liveUpdate.subscribe('transportManager:default', { tRender: 'object.player.tRender', isPlaying: 'object.player.playing', }) // autoSubscribe — strips 'object.' prefix automatically // 'object.offset' → key 'offset' const { offset, rotation } = liveUpdate.autoSubscribe('screen2:surface1', [ 'object.offset', 'object.rotation', ]) ` Return Values Both methods return Record<string, SubscriptionValue where SubscriptionValue extends ComputedRef<any. Access with .value in script, auto-unwraps in templates. Each subscription value has: - .freeze() — pause updates (for hidden/offscreen components) - .thaw() — resume updates - .isFrozen() — check state Update Frequency `typescript // Global default const liveUpdate = useLiveUpdate(endpoint, { updateFrequencyMs: 100 }) // Per-subscription override const subs = liveUpdate.subscribe('transportManager:default', { tRender: 'object.player.tRender', }, { updateFrequencyMs: 50 }) // 50ms = highest frequency (default) ` Tested Transport Properties All confirmed working with 'transportManager:default': | Property Path | Type | Description | |---------------|------|-------------| | object.player.tRender | float | Playhead position (frame-quantized) | | object.player.playing | bool | True during playback | | object.player.stopped | bool | True when stopped | | object.engaged | bool | Transport engaged state | Confirmed subscription paths (all probed 2026-04-08) | Object | Property Path | Type | Notes | |---|---|---|---| | transportManager:default | object.player.tRender | float | transport render time | | transportManager:default | object.player.playing | bool | | | transportManager:default | object.player.stopped | bool | | | transportManager:default | object.engaged | bool | | | track:<no-space-name | object.tcadjust | float | direct Track attribute | | track:<no-space-name | object.triggernote | string | direct Track attribute | | track:<no-space-name | object.layers[N].module.variable1 | float | indexed collection access into hosted module | Indexed collection access IS supported object.layers[N].module.variable1 works on a track object path. Numeric [N] works in property paths. String-key access [\"name\"] and method calls like findLayerByName(\"name\") were untested because the numeric form succeeded first — try numeric indexing before reaching for fancier syntax. Errors observed and what they mean | Error | Meaning | |---|---| | UnexpectedToken on the object-path side | Parse error in the object name. Most often caused by spaces in resource names — rename the resource. | | Subscription returns undefined initial value |"
   },
   {
+    "id": "patterns/local-project-plugin-manifest-and-preflight",
+    "title": "Local Project Plugin Manifest and Discovery Preflight",
+    "category": "patterns",
+    "status": "confirmed",
+    "testedDate": "2026-05-26",
+    "designerVersion": "r33.1.3.249736",
+    "severity": null,
+    "summary": "Local project plugins scaffolded by the toolkit use this public/d3plugin.json shape:",
+    "tags": [
+      "confirmed",
+      "discovery",
+      "local",
+      "local project plugin manifest",
+      "manifest",
+      "pattern",
+      "patterns",
+      "plugin",
+      "preflight",
+      "project"
+    ],
+    "path": "packages/knowledge-base/patterns/local-project-plugin-manifest-and-preflight.md",
+    "resourceUri": "d3kb://patterns/local-project-plugin-manifest-and-preflight",
+    "related": [
+      "bugs/local-plugin-discovery-stale-after-invalid-manifest"
+    ],
+    "searchText": "Local Project Plugin Manifest and Discovery Preflight Manifest Shape Local project plugins scaffolded by the toolkit use this public/d3plugin.json shape: ``json { \"name\": \"My Plugin\", \"description\": \"A Disguise Designer plugin\", \"version\": \"0.1.0\", \"entry\": \"index.html\" } ` Keep \"entry\": \"index.html\" for local project plugins. Do not replace it with \"url\": \"index.html\" based on remote plugin or DNS-SD documentation unless a live Designer probe has confirmed that exact local-plugin manifest shape. The scaffolded index.html should keep the legacy d3-plugin- meta tags unless a version-specific compatibility probe says otherwise: `html <meta name=\"d3-plugin-width\" content=\"800\" / <meta name=\"d3-plugin-height\" content=\"600\" / <meta name=\"d3-plugin-min-width\" content=\"300\" / <meta name=\"d3-plugin-min-height\" content=\"400\" / <meta name=\"d3-plugin-resizable\" content=\"true\" / ` Deterministic Preflight Before demoing or validating feature work, verify plugin discovery itself: 1. Build/deploy the plugin. 2. Check the deployed plugin root contains d3plugin.json and index.html. 3. Fetch the deployed manifest through Designer's project web route. 4. Open Plugin Launcher and confirm the plugin appears. 5. If automating the check, query /api/service/plugins/info over WebSocket and verify the plugin list is non-empty and includes the expected plugin name. Stale Discovery Recovery If the deployed manifest is valid and served correctly but Plugin Launcher still shows no plugins, treat Designer discovery as stale service state. Do not continue rebuilding. Restart all d3-related services/processes with the site's standard d3killall or equivalent, then restart Designer and reopen the project. Local vs Remote Manifest Metadata Remote plugins published over DNS-SD may use url metadata to advertise a custom web endpoint. That is a separate plugin type from local project plugins that live under a project plugins/ directory. Do not transfer remote-plugin manifest assumptions into local project plugin metadata without a focused live probe. Related - bugs/local-plugin-discovery-stale-after-invalid-manifest.md - patterns/plugin-window-sizing.md - patterns/remote-plugin-dnssd-publishing.md` [{\"name\":\"local project plugin manifest\",\"match\":\"d3plugin\\\\.json|entry\\\\s:\\\\s['\\\\\\\"]index\\\\.html|plugins/info\",\"relatedfiles\":[\"local-project-plugin-manifest-and-preflight.md\",\"local-plugin-discovery-stale-after-invalid-manifest.md\"],\"required\":false}] []"
+  },
+  {
     "id": "patterns/media-thumbnail-extraction",
     "title": "Media Thumbnail Extraction",
     "category": "patterns",
@@ -847,6 +875,32 @@
       "patterns/plugin-console-debugging"
     ],
     "searchText": "Plugin Window Sizing in Designer CEF Summary Designer owns the OS window frame for local plugin panels. The plugin page can control the initial window size through static <meta tags only. Runtime resize attempts affect page layout at most; they do not resize the host window. Initial Size Meta Tags Use both the newer disguise-plugin- tags and the legacy d3-plugin- tags for widest Designer compatibility: ``html <meta name=\"disguise-plugin-window-size\" content=\"50,50\" / <meta name=\"disguise-plugin-window-min-size\" content=\"5,10\" / <meta name=\"disguise-plugin-window-resizable\" content=\"true\" / <meta name=\"d3-plugin-width\" content=\"50\" / <meta name=\"d3-plugin-height\" content=\"50\" / <meta name=\"d3-plugin-min-width\" content=\"5\" / <meta name=\"d3-plugin-min-height\" content=\"10\" / <meta name=\"d3-plugin-resizable\" content=\"true\" / ` Designer reads these when the plugin is first opened, then saves and restores geometry itself on later opens. Runtime Resize Does Not Work Do not spend time on these approaches in Designer CEF: - window.resizeTo(w, h) - changing document.body or document.documentElement dimensions - CSS shrinking html, body - window.postMessage resize requests - mutating meta tags after load They do not reach the Designer-managed outer window frame. Recommended UX Start small and useful. Let the user drag once; Designer will remember the geometry. For compact utility plugins, open in a collapsed state and persist the user's expanded/collapsed UI preference separately from the host window geometry. `ts const compact = ref(true) ` confirm() Is Not Reliable Designer CEF can make window.confirm() return false for plugin UI flows. Do not use it for destructive actions because it can silently cancel the operation. Use inline two-step confirmation instead: `ts const confirming = ref(false) let confirmTimer: ReturnType<typeof setTimeout | null = null function requestDelete() { if (confirming.value) { if (confirmTimer) clearTimeout(confirmTimer) confirming.value = false deleteItem() return } confirming.value = true confirmTimer = setTimeout(() = { confirming.value = false }, 3000) } `` [{\"name\":\"Designer plugin window meta tags\",\"match\":\"disguise-plugin-window-size|d3-plugin-width|window\\\\.resizeTo|confirm\\\\s\\\\(\",\"relatedfiles\":[\"plugin-window-sizing.md\",\"plugin-console-debugging.md\"],\"required\":false}] []"
+  },
+  {
+    "id": "patterns/project-builder-stage-import",
+    "title": "Project Builder Stage Import",
+    "category": "patterns",
+    "status": "confirmed",
+    "testedDate": "2026-05-26",
+    "designerVersion": "r33.0.2.246160",
+    "severity": null,
+    "summary": "MeshFromObj can load a real .obj file after the file is moved into the project under objects/MeshFromObj/<subfolder/<name.obj.",
+    "tags": [
+      "builder",
+      "confirmed",
+      "directprojection short resource path",
+      "import",
+      "meshfromobj obj resource path",
+      "pattern",
+      "patterns",
+      "project",
+      "prop render tint",
+      "stage"
+    ],
+    "path": "packages/knowledge-base/patterns/project-builder-stage-import.md",
+    "resourceUri": "d3kb://patterns/project-builder-stage-import",
+    "related": [],
+    "searchText": "Project Builder Stage Import MeshFromObj can load a real .obj file after the file is moved into the project under objects/MeshFromObj/<subfolder/<name.obj. Confirmed resource paths: ``python screenmesh = resourceManager.load( \"objects/meshfromobj/screen/wall.obj\", d3.MeshFromObj, ) propmesh = resourceManager.load( \"objects/meshfromobj/prop/wall.obj\", d3.MeshFromObj, ) led = resourceManager.loadOrCreate(\"objects/ledscreen/main.apx\", d3.LedScreen) surface = resourceManager.loadOrCreate(\"objects/screen/main.apx\", d3.Screen2) direct = resourceManager.loadOrCreate(\"objects/direct/main direct.apx\", d3.DirectProjection) prop = resourceManager.loadOrCreate(\"objects/prop/wall.apx\", d3.Prop) ` For screens, assign the mesh and resolution, then reassign the complete native stage list: `python screen.resolution = d3.Vec2(3840.0, 2160.0) screen.mesh = screenmesh screens = list(stage.ledScreens) screens.append(screen) stage.ledScreens = screens ` For projection surfaces use stage.surfaces with d3.Screen2 and the objects/screen/ resource folder. Direct projections are valid under objects/direct/: `python direct.screens = [screen] direct.resolution = d3.Vec2(3840.0, 2160.0) ` Prop flat colour can be set through render settings: `python prop.renderSettings.tint = d3.Colour(0.1, 0.1, 0.1, 1.0) ` Save Scope Avoid resourceManager.saveAll() in this flow. During the confirmation probe, saveAll() touched unrelated track/metafield/sticky-manager resources and emitted a sticky-manager write error. The focused rerun passed cleanly when it saved only the created/edited resources and state.stage. Use direct resource saves: `python screen.save() direct.save() prop.save() venue.save() state.stage.save() ` Probe file: packages/knowledge-base/reference-tools/probeprojectbuilderstageimport.py`. [{\"name\":\"MeshFromObj OBJ resource path\",\"match\":\"objects/meshfromobj/.+\\\\.obj\",\"relatedfiles\":[\"project-builder-stage-import.md\"],\"required\":false},{\"name\":\"DirectProjection short resource path\",\"match\":\"objects/direct/\",\"relatedfiles\":[\"project-builder-stage-import.md\"],\"required\":false},{\"name\":\"Prop render tint\",\"match\":\"renderSettings\\\\.tint\",\"relatedfiles\":[\"project-builder-stage-import.md\"],\"required\":false}] []"
   },
   {
     "id": "patterns/python-attribute-assignment-is-permissive",
@@ -1680,6 +1734,39 @@
     "searchText": "kb-coverage Hook Blocks loadOrCreate for All Types Symptom The kb-coverage hook (scripts/check-kb-coverage.mjs) blocks resourceManager.loadOrCreate(...) unconditionally whenever the create-or-duplicate.md pattern file exists. A probe or plugin Python script that uses resourceManager.loadOrCreate(path, SomeNonCrashingType) is blocked by the hook with no obvious workaround, even for resource types that work fine with loadOrCreate. Root cause The hook's intent was to enforce the create-or-duplicate workaround for types known to crash (Indirection, ListIndirectionController — see loadOrCreate-access-violation.md), but the rule in scripts/lib/api-coverage.mjs is type-agnostic. It matches any call to resourceManager.loadOrCreate regardless of the type argument. Workaround Use the constructor + explicit path assignment + parent collection membership pattern instead: ``python import d3 evt = d3.EventTransportOSC() evt.path = \"objects/eventtransportosc/my-transport.apx\" evt.oscdevice = someoscdevice Add to parent collection — this triggers Designer's normal save lifecycle tm.localtransports = list(tm.localtransports) + [evt] resourceManager.saveAll() ` This was confirmed to work for EventTransportOSC in probeeventtransportoscv2.py (final form). The pattern is: blipValue instances added to a parent collection get persisted through the parent's save lifecycle, even without going through loadOrCreate. Long-term fix The APICOVERAGE entry in scripts/lib/api-coverage.mjs for resourceManager.loadOrCreate should be refined to only block for the specific types listed in create-or-duplicate.md's \"known crashers\" section (Indirection, ListIndirectionController), not universally. This is a toolkit fix flagged for the Toolkit Engineer. CLAUDE.md candidate Refine the kb-coverage hook to be type-specific, so non-crashing loadOrCreate` calls are not blocked. Related - create-or-duplicate.md - loadOrCreate-access-violation.md - python-attribute-assignment-is-permissive.md [] []"
   },
   {
+    "id": "bugs/local-plugin-discovery-stale-after-invalid-manifest",
+    "title": "Local Plugin Discovery Can Stay Empty After Invalid Manifest Metadata",
+    "category": "bugs",
+    "status": "confirmed",
+    "testedDate": "2026-05-26",
+    "designerVersion": "r33.1.3.249736",
+    "severity": "error",
+    "summary": "Designer Plugin Launcher reports no plugins, and the service WebSocket returns an empty plugin list even though the plugin files are present and served over HTTP.",
+    "tags": [
+      "after",
+      "bug",
+      "bugs",
+      "confirmed",
+      "discovery",
+      "empty",
+      "error",
+      "invalid",
+      "local",
+      "local plugin discovery stale after invalid manifest",
+      "manifest",
+      "metadata",
+      "plugin",
+      "stale",
+      "stay"
+    ],
+    "path": "packages/knowledge-base/bugs/local-plugin-discovery-stale-after-invalid-manifest.md",
+    "resourceUri": "d3kb://bugs/local-plugin-discovery-stale-after-invalid-manifest",
+    "related": [
+      "patterns/local-project-plugin-manifest-and-preflight"
+    ],
+    "searchText": "Local Plugin Discovery Can Stay Empty After Invalid Manifest Metadata Symptom Designer Plugin Launcher reports no plugins, and the service WebSocket returns an empty plugin list even though the plugin files are present and served over HTTP. Observed payload from /api/service/plugins/info: ``json {\"plugins\":{\"plugins\":[]},\"isSessionActive\":false} ` Trigger Observed A local project plugin was deployed with invalid/unproven local manifest metadata: the known-working scaffold shape using \"entry\": \"index.html\" was temporarily replaced with a remote-style/custom endpoint shape using \"url\": \"index.html\". After restoring the valid manifest on disk, Designer continued returning an empty plugin list until the d3 service stack was restarted. Evidence The project web server served the bad manifest during the failure window, then served the restored manifest later: - bad manifest response size: 82 bytes - restored manifest response size: 126 bytes Even after the restored manifest was served, /api/service/plugins/info continued returning the empty 52-byte response until all d3 services were killed and Designer was restarted. After restart, Designer logged the project plugin directory scan and opened the same plugin from the project URL. Recovery Do not keep rebuilding the plugin when discovery is stuck in this state. 1. Confirm d3plugin.json uses the local project plugin manifest shape. 2. Confirm index.html exists in the deployed plugin root. 3. Run the site's standard d3killall or equivalent full d3 service/process stop. 4. Restart Designer and reopen the project. 5. Reopen Plugin Launcher and verify the plugin appears. Prevention Treat plugin discovery metadata as service-cached state, not as ordinary frontend hot reload. Feature code and static assets may hot reload; invalid plugin discovery metadata can require a full d3 service restart before Designer trusts the plugin list again. For local project plugins, use the scaffold manifest with \"entry\": \"index.html\". Do not infer or substitute \"url\" from remote plugin docs unless a live probe has confirmed that exact shape on the target Designer version. Related - patterns/local-project-plugin-manifest-and-preflight.md` [{\"name\":\"local plugin discovery stale after invalid manifest\",\"match\":\"d3plugin\\\\.json|plugins/info|Plugin Launcher|No plugins detected\",\"relatedfiles\":[\"local-plugin-discovery-stale-after-invalid-manifest.md\",\"local-project-plugin-manifest-and-preflight.md\"],\"required\":false}] []"
+  },
+  {
     "id": "bugs/optional-args-undefined-python",
     "title": "Optional TypeScript Args Become undefined in Python Execute Scripts",
     "category": "bugs",
@@ -1838,6 +1925,34 @@
     "resourceUri": "d3kb://bugs/phantom-method-invented-from-plausibility",
     "related": [],
     "searchText": "Phantom Method: track.removeCueAtBeat (Agent-Invented API) Description An implementation used track.removeCueAtBeat(beat) as the cue-clear step of a track-wipe flow. The method does not exist on Track, Layer, or anywhere in packages/shared/d3.pyi. Designer raised: `` AttributeError: 'Track' object has no attribute 'removeCueAtBeat' ` The name was invented from plausibility — the agent needed a remove-one-cue API, pattern-matched against nearby real methods (mergeSectionAtBeat, splitSectionAtBeat, setNoteAtBeat), and produced a name that looks like it should exist. It does not. Why This Class of Mistake Matters check-python-safety.mjs and check-kb-coverage.mjs scan for known crasher strings and known-API coverage gaps. Neither hook catches invented names that appear in neither list. The code passes both hooks and fails at runtime. This is a recurring failure mode — every time it happens, it violates the discipline rule in the Designer Python Engineer persona (\"Grepping the knowledge base is not optional — it is the first action before touching any API not used in this session\"). The fix is procedural, not code: - Before writing any dotted method call on a Designer object, grep packages/shared/d3.pyi for the method name. If it appears nowhere, do not write it. - Prefer a tested pattern from knowledge-base/patterns/ over a first-principles guess. - When unsure of the remove/add surface, search the class's parent classes too (here: TimeSequence, which owns removeAtTime). Wrong `python Phantom — method does not exist on Track for beat in sortedbeats: track.removeCueAtBeat(beat) AttributeError at runtime ` Right Recipe from patterns/cue-removal.md: `python cuebeats = list(track.cueBeats()) for beat in sorted([float(b) for b in cuebeats], reverse=True): if beat <= 0: continue beat 0 is the structural root — never remove try: track.mergeSectionAtBeat(beat) except: pass try: track.cues.removeAtTime(beat) except: pass track.save() ` Fix Applied Fresh-import implementations should call a local wipe helper and cite patterns/cue-removal.md in code comments so the behavior remains auditable. Prevention (Toolkit Candidate) Extend scripts/check-kb-coverage.mjs (or add a sibling hook) to: 1. Extract every dotted method call X.methodName( from any Python diff. 2. Grep packages/shared/d3.pyi for methodName as a def/property/attribute. 3. Hard-fail (exit 2) on any method name with zero hits in the stub. This would catch phantom methods before Designer ever sees them. Related - patterns/cue-removal.md — the correct recipe - patterns/disguise-docs-as-source-of-truth.md — methodology rule - patterns/python-attribute-assignment-is-permissive.md` — a related failure mode where the attribute accepts the write but does nothing [] [{\"pattern\":\"\\\\.removeCueAtBeat\\\\s\\\\(\",\"message\":\"Track has no method removeCueAtBeat. Use track.cues.removeAtTime(beat) with mergeSectionAtBeat — see patterns/cue-removal.md.\",\"severity\":\"error\"}]"
+  },
+  {
+    "id": "bugs/powershell-registermodule-json-inflation",
+    "title": "PowerShell ConvertTo-Json Can Inflate registermodule Bodies",
+    "category": "bugs",
+    "status": "confirmed",
+    "testedDate": "2026-05-26",
+    "designerVersion": null,
+    "severity": "warning",
+    "summary": "Posting Designer Python module source to /api/session/python/registermodule from PowerShell returned:",
+    "tags": [
+      "bodies",
+      "bug",
+      "bugs",
+      "confirmed",
+      "convertto",
+      "inflate",
+      "inflation",
+      "json",
+      "powershell",
+      "registermodule",
+      "registermodule powershell json body",
+      "warning"
+    ],
+    "path": "packages/knowledge-base/bugs/powershell-registermodule-json-inflation.md",
+    "resourceUri": "d3kb://bugs/powershell-registermodule-json-inflation",
+    "related": [],
+    "searchText": "PowerShell ConvertTo-Json Can Inflate registermodule Bodies Symptom Posting Designer Python module source to /api/session/python/registermodule from PowerShell returned: ``text 413 Request Entity Too Large nginx/1.22.0 ` The apparent failures happened with probe files around 2.9 KB and 6.6 KB. Root Cause The request was built with PowerShell ConvertTo-Json over a Get-Content -Raw value that PowerShell serialized as a rich object instead of a plain JSON string. A 2.3 KB Python file produced a roughly 3.8 MB JSON body. Confirmation The same files registered successfully when posted from Node with JSON.stringify({ moduleName, contents }): - 2.3 KB Python file, 2.5 KB JSON body, HTTP 200 - 2.6 KB Python file, 2.8 KB JSON body, HTTP 200 - 6.6 KB Python file, 7.2 KB JSON body, HTTP 200 - 2.9 KB Python file, 3.2 KB JSON body, HTTP 200 Workaround Use Node, the toolkit CLI, or another JSON client that serializes module source as a plain string. If PowerShell must be used, inspect the serialized body size and body shape before posting. Impact This is not evidence of a Designer registermodule` payload limit. Do not split plugin Python modules solely because of this PowerShell 413 result. [{\"name\":\"registermodule PowerShell JSON body\",\"match\":\"ConvertTo-Json\",\"relatedfiles\":[\"powershell-registermodule-json-inflation.md\"],\"required\":false}] []"
   },
   {
     "id": "bugs/python-file-write-crashers",

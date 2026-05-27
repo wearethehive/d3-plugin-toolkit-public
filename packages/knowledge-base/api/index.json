@@ -163,6 +163,13 @@
     "testedDate": "2026-03-22"
   },
   {
+    "file": "patterns/local-project-plugin-manifest-and-preflight.md",
+    "status": "confirmed",
+    "pattern": "local-project-plugin-manifest-and-preflight",
+    "testedDate": "2026-05-26",
+    "designerVersion": "r33.1.3.249736"
+  },
+  {
     "file": "patterns/media-thumbnail-extraction.md",
     "status": "confirmed",
     "pattern": "media-thumbnail-extraction",
@@ -208,6 +215,13 @@
     "status": "observed",
     "pattern": "plugin-window-sizing",
     "testedDate": "2026-04-19"
+  },
+  {
+    "file": "patterns/project-builder-stage-import.md",
+    "status": "confirmed",
+    "pattern": "project-builder-stage-import",
+    "testedDate": "2026-05-26",
+    "designerVersion": "r33.0.2.246160"
   },
   {
     "file": "patterns/python-attribute-assignment-is-permissive.md",
@@ -424,6 +438,14 @@
     "testedDate": "2026-04-08"
   },
   {
+    "file": "bugs/local-plugin-discovery-stale-after-invalid-manifest.md",
+    "status": "confirmed",
+    "bug": "local-plugin-discovery-stale-after-invalid-manifest",
+    "severity": "error",
+    "testedDate": "2026-05-26",
+    "designerVersion": "r33.1.3.249736"
+  },
+  {
     "file": "bugs/optional-args-undefined-python.md",
     "status": "confirmed",
     "bug": "optional-args-undefined-python",
@@ -465,6 +487,13 @@
     "severity": "error",
     "testedDate": "2026-04-24",
     "designerVersion": "r32.x"
+  },
+  {
+    "file": "bugs/powershell-registermodule-json-inflation.md",
+    "status": "confirmed",
+    "bug": "powershell-registermodule-json-inflation",
+    "severity": "warning",
+    "testedDate": "2026-05-26"
   },
   {
     "file": "bugs/python-file-write-crashers.md",

@@ -1,6 +1,6 @@
 {
   "name": "d3-plugin-toolkit",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "private": true,
   "license": "LicenseRef-HiveSchool-Source-Available-1.0",
   "description": "Toolkit for building local and remote Disguise Designer plugins with guarded Designer Python workflows.",
