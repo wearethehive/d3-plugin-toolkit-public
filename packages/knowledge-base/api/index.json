@@ -54,6 +54,12 @@
     "testedDate": "2026-04-08"
   },
   {
+    "file": "patterns/cef-localhost-resolution.md",
+    "status": "confirmed",
+    "pattern": "cef-localhost-resolution",
+    "testedDate": "2026-05-13"
+  },
+  {
     "file": "patterns/create-or-duplicate.md",
     "status": "workaround",
     "pattern": "create-or-duplicate",
@@ -84,6 +90,12 @@
     "testedDate": "2026-04-19"
   },
   {
+    "file": "patterns/currently-edited-resource-discovery.md",
+    "status": "confirmed",
+    "pattern": "currently-edited-resource-discovery",
+    "testedDate": "2026-10-06"
+  },
+  {
     "file": "patterns/disguise-docs-as-source-of-truth.md",
     "status": "confirmed",
     "pattern": "disguise-docs-as-source-of-truth",
@@ -96,9 +108,28 @@
     "testedDate": "2026-04-11"
   },
   {
+    "file": "patterns/electron-tray-app-native-serial.md",
+    "status": "confirmed",
+    "pattern": "electron-tray-app-native-serial",
+    "testedDate": "2026-05-13"
+  },
+  {
+    "file": "patterns/eos-osc-tcp-programming.md",
+    "status": "confirmed",
+    "pattern": "eos-osc-tcp-programming",
+    "testedDate": "2026-07-07"
+  },
+  {
     "file": "patterns/expression-api.md",
     "status": "documented",
     "pattern": "expression-api"
+  },
+  {
+    "file": "patterns/expression-feedback-read-via-evaluatefromstring.md",
+    "status": "confirmed",
+    "pattern": "expression-feedback-read-via-evaluatefromstring",
+    "testedDate": "2026-08-17",
+    "designerVersion": "r34.0.3"
   },
   {
     "file": "patterns/feed-scene-config.md",
@@ -117,6 +148,13 @@
     "status": "confirmed",
     "pattern": "feedrect-mask-blackout",
     "testedDate": "2026-04-11"
+  },
+  {
+    "file": "patterns/fieldsequence-eval-deprecated-for-plugins.md",
+    "status": "confirmed",
+    "pattern": "fieldsequence-eval-deprecated-for-plugins",
+    "testedDate": "2026-08-17",
+    "designerVersion": "r34.0.3"
   },
   {
     "file": "patterns/group-layer-creation.md",
@@ -170,6 +208,12 @@
     "designerVersion": "r33.1.3.249736"
   },
   {
+    "file": "patterns/media-folder-reference-scanning.md",
+    "status": "confirmed",
+    "pattern": "media-folder-reference-scanning",
+    "testedDate": "2026-05-15"
+  },
+  {
     "file": "patterns/media-thumbnail-extraction.md",
     "status": "confirmed",
     "pattern": "media-thumbnail-extraction",
@@ -191,6 +235,13 @@
     "status": "observed",
     "pattern": "osc-bridge-server-stdlib",
     "testedDate": "2026-05-03"
+  },
+  {
+    "file": "patterns/osc-control-module-keyframing.md",
+    "status": "confirmed",
+    "pattern": "osc-control-module-keyframing",
+    "testedDate": "2026-09-22",
+    "designerVersion": "r34.0.3"
   },
   {
     "file": "patterns/osc-device-lifecycle.md",
@@ -224,6 +275,12 @@
     "designerVersion": "r33.0.2.246160"
   },
   {
+    "file": "patterns/project-file-history-archive-copy.md",
+    "status": "confirmed",
+    "pattern": "project-file-history-archive-copy",
+    "testedDate": "2026-10-06"
+  },
+  {
     "file": "patterns/python-attribute-assignment-is-permissive.md",
     "status": "confirmed",
     "pattern": "python-attribute-assignment-is-permissive",
@@ -236,10 +293,22 @@
     "testedDate": "2026-05-19"
   },
   {
+    "file": "patterns/resource-lock-roundtrip.md",
+    "status": "confirmed",
+    "pattern": "resource-lock-roundtrip",
+    "testedDate": "2026-10-06"
+  },
+  {
     "file": "patterns/safe-iteration.md",
     "status": "required",
     "pattern": "safe-iteration",
     "testedDate": "2026-03-15"
+  },
+  {
+    "file": "patterns/same-mapping-layer-compositing.md",
+    "status": "observed",
+    "pattern": "same-mapping-layer-compositing",
+    "testedDate": "2026-08-25"
   },
   {
     "file": "patterns/sandbox-stdlib.md",
@@ -287,6 +356,13 @@
     "designerVersion": "r32.3.4"
   },
   {
+    "file": "patterns/track-arrow-source-lookup.md",
+    "status": "confirmed",
+    "pattern": "track-arrow-source-lookup",
+    "testedDate": "2026-07-06",
+    "designerVersion": "r33.2.1"
+  },
+  {
     "file": "patterns/track-wipe.md",
     "status": "candidate",
     "pattern": "track-wipe",
@@ -300,7 +376,8 @@
   {
     "file": "patterns/transport-manager-access.md",
     "status": "confirmed",
-    "pattern": "transport-manager-access"
+    "pattern": "transport-manager-access",
+    "testedDate": "2026-06-15"
   },
   {
     "file": "patterns/transport-playhead-and-section-navigation.md",
@@ -344,6 +421,13 @@
     "bug": "addLayer-crash",
     "severity": "crash",
     "testedDate": "2026-03-15"
+  },
+  {
+    "file": "bugs/designer-pythonapi-loader-python314-ast-str.md",
+    "status": "confirmed",
+    "bug": "designer-pythonapi-loader-python314-ast-str",
+    "severity": "error",
+    "testedDate": "2026-10-06"
   },
   {
     "file": "bugs/dir-crash.md",
@@ -395,6 +479,14 @@
     "testedDate": "2026-05-04"
   },
   {
+    "file": "bugs/fieldsequence-standalone-construction-uninitialized-crash.md",
+    "status": "confirmed",
+    "bug": "fieldsequence-standalone-construction-uninitialized-crash",
+    "severity": "crash",
+    "testedDate": "2026-08-17",
+    "designerVersion": "r34.0.3"
+  },
+  {
     "file": "bugs/inject-root-component.md",
     "status": "confirmed",
     "bug": "inject-root-component",
@@ -444,6 +536,28 @@
     "severity": "error",
     "testedDate": "2026-05-26",
     "designerVersion": "r33.1.3.249736"
+  },
+  {
+    "file": "bugs/local-plugin-launcher-session-hostname-cors.md",
+    "status": "confirmed",
+    "bug": "local-plugin-launcher-session-hostname-cors",
+    "severity": "error",
+    "testedDate": "2026-10-06",
+    "designerVersion": "r34.0.3"
+  },
+  {
+    "file": "bugs/locktodirector-access-violation.md",
+    "status": "confirmed",
+    "bug": "locktodirector-access-violation",
+    "severity": "crash",
+    "testedDate": "2026-06-15"
+  },
+  {
+    "file": "bugs/notch-layer-disappeared-after-read-probe.md",
+    "status": "observed-unreproduced",
+    "bug": "notch-layer-disappeared-after-read-probe",
+    "severity": "critical",
+    "testedDate": "2026-07-06"
   },
   {
     "file": "bugs/optional-args-undefined-python.md",
@@ -503,6 +617,14 @@
     "testedDate": "2026-05-04"
   },
   {
+    "file": "bugs/registered-module-os-direct-name-collision.md",
+    "status": "observed",
+    "bug": "registered-module-os-direct-name-collision",
+    "severity": "warning",
+    "testedDate": "2026-08-21",
+    "designerVersion": "r34.0.3.258249"
+  },
+  {
     "file": "bugs/registermodule-atexit-import.md",
     "status": "observed",
     "bug": "registermodule-atexit-import",
@@ -538,6 +660,13 @@
     "severity": "crash",
     "testedDate": "2026-03-17",
     "designerVersion": "r32.3.4"
+  },
+  {
+    "file": "bugs/section-length-stale-after-split.md",
+    "status": "confirmed",
+    "bug": "section-length-stale-after-split",
+    "severity": "error",
+    "testedDate": "2026-07-14"
   },
   {
     "file": "bugs/setString-empty-keysequence.md",

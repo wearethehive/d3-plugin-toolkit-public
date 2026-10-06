@@ -25,6 +25,7 @@ npm -w packages/plugins/my-plugin run build
 npm run build:cli
 npm run cli -- exec "return 'hello'"
 npm run cli -- exec --file script.py
+npm run cli -- kb submit-probe script.py
 npm run dev:cli -- exec "return 'hello'"
 ```
 
@@ -41,9 +42,10 @@ the workspace:
 5. Before touching any Designer API, search `packages/knowledge-base/patterns/`,
    `packages/knowledge-base/bugs/`, and `packages/knowledge-base/reference-tools/`.
 6. If the KB does not prove the behavior, run a focused probe against live
-   Designer using the CLI: `npm run cli -- exec --file <probe.py>`, `npm run cli
-   -- test "<expr>"`, or a test suite. Broad `npm run cli -- probe <target>
-   --unsafe-dir` is for disposable sessions only.
+   Designer using the contribution-aware CLI path: `npm run cli -- kb
+   submit-probe <probe.py>`, `npm run cli -- test "<expr>"`, or a test suite.
+   Use plain `exec --file` only for throwaway private debugging. Broad
+   `npm run cli -- probe <target> --unsafe-dir` is for disposable sessions only.
 7. Use `npm run cli -- session snapshot` before/after risky Designer changes
    and `npm run cli -- session diff` to inspect live effects.
 8. Build with `npm -w packages/plugins/<plugin> run build`.
@@ -55,6 +57,8 @@ the workspace:
 **Before writing any Python that touches a Designer API:** Read `@docs/mandatory-workflow.md` in full.
 Follow all three rules. No exceptions. No shortcuts. Guessing at API behaviour is forbidden —
 if the knowledge base doesn't have a pattern, write a probe script and test it first.
+Use `npm run cli -- kb submit-probe <probe.py>` when the result may become
+reusable KB evidence.
 
 **Before writing any Python that executes on Designer:** Read `@docs/reference.md` in full.
 No exceptions. The crasher list exists because every item on it has destroyed a session.

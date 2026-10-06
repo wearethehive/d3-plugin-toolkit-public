@@ -108,6 +108,26 @@ npm run cli -- deploy my-plugin -- --project "D:/d3 Projects/MyProject"
 
 The manual deploy command copies to `<project>/Plugins/my-plugin/`. See `docs/cheat-sheet.md` for more deployment options, including the `D3_PLUGIN_OUT` per-build override.
 
+## KB Contribution Settings
+
+The public repo ships with a committed `.d3-toolkit.json` that keeps community
+KB contribution capture available but telemetry off by default:
+
+```json
+{
+  "kbContributionMode": "community",
+  "kbTelemetry": {
+    "default": "off",
+    "promptOnFirstEligibleProbe": true
+  }
+}
+```
+
+Focused Designer probes should use `npm run cli -- kb submit-probe <probe.py>`
+when the result may be useful to the shared KB. The CLI always writes a local
+JSON payload under `kb-submissions/`. It uploads only after user consent and
+only when an isolated collector endpoint is configured.
+
 ## Suggested Starting Prompt
 
 When working with an AI coding assistant in this repo, paste a prompt like this

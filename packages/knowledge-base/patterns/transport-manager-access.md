@@ -1,22 +1,30 @@
 ---
 type: pattern
 status: confirmed
+tested: "2026-06-15"
 ---
 
 # TransportManager Access from Python Sandbox
 
 ## Rule
 
-`guisystem.transportManager` is **declared in `d3.pyi` but NOT exposed in the
-Python sandbox**. Reading it raises `AttributeError`. Same for
-`guisystem.transport` and `guisystem.session`.
+`guisystem.transportManager` is **declared in `d3.pyi` but not exposed in the
+tested Python sandbox**. Reading it raises `AttributeError`. The same applies
+to `guisystem.transport` and `guisystem.session`.
 
-The correct access path is:
+Prefer the active manager exposed by the injected GUI context:
+
+```python
+tm = guisystem.currentTransportManager
+```
+
+To enumerate managers or support a context where the active one is unavailable,
+use the injected `resourceManager`:
 
 ```python
 import d3
 tm_list = resourceManager.allResources(d3.TransportManager)
-tm = tm_list[0]   # most projects have one, named "default"
+tm = tm_list[0]   # most projects have one, commonly named "default"
 ```
 
 This returns the actual `TransportManager` resource(s). Match by
@@ -35,7 +43,9 @@ hunting for state that isn't missing. Both probes
 - `tm.timecode` → `TimecodeTransport` (settable; round-trip confirmed by
   `probe_timecode_assign.py`)
 - `tm.engaged` → bool (independent of `.timecode` — a manager can have a
-  source assigned while disengaged; the assignment still reads back)
+  source assigned while disengaged; the assignment still reads back). A focused
+  r33.2.1 probe toggled this setter, read it back, and restored the original
+  value without a crash.
 - `tm.timecode_can_change_track` → int
 - `tm.beatToTimecode(beat)` / `tm.smpteClockType()`
 

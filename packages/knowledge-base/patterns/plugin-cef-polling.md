@@ -154,6 +154,35 @@ silently stalling.
 
 ---
 
+## Rule 3 — Do Not Overlap Python Relay Polls
+
+A CEF panel that started a new Python-relay request every 1500 ms accumulated
+more than 80 in-flight requests when Designer slowed down. The Python queue
+saturated and the plugin controls stopped responding.
+
+Prefer Live Update for Designer state. When an external bridge owns the state,
+have it push changes to the panel over WebSocket. If polling is unavoidable,
+allow only one in-flight request and skip interval ticks until it completes:
+
+```ts
+let requestInFlight = false
+
+async function guardedPoll() {
+  if (requestInFlight) return
+  requestInFlight = true
+  try {
+    await refreshState()
+  } finally {
+    requestInFlight = false
+  }
+}
+```
+
+The invariant is back-pressure: a timer must never enqueue work faster than
+Designer can finish it.
+
+---
+
 ## What Does NOT Work
 
 - ❌ Relying on `setInterval` alone with no persistence — state is lost on
@@ -163,6 +192,8 @@ silently stalling.
   not retroactively fire missed polls.
 - ❌ Bumping the interval shorter to "work around" throttling — the
   throttle scales with background time, not interval length.
+- ❌ Starting a new Python execution while the previous poll is still in
+  flight — requests accumulate and can saturate Designer's execution queue.
 
 ## Related
 

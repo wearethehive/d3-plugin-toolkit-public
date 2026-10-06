@@ -64,6 +64,18 @@ Do not continue rebuilding. Restart all d3-related services/processes with the
 site's standard `d3killall` or equivalent, then restart Designer and reopen the
 project.
 
+## Launcher Session Alias Failure
+
+If a local plugin appears but does not open, inspect the Designer console for a
+pre-entry CORS failure between a bare machine hostname and its `.local` alias.
+On r34.0.3, Plugin Launcher performs the native `plugin.openPlugin(...)` call
+through `/api/session/python/execute` on the `target` query hostname. This is
+independent of `requiresSession`. If the launcher origin uses `.local` but
+`target` is the bare hostname, the browser blocks the POST before the plugin
+entry page loads. Use the toolkit's local `d3 exec` path to dispatch the same
+native open call as a diagnostic/workaround. See
+`bugs/local-plugin-launcher-session-hostname-cors.md`.
+
 ## Local vs Remote Manifest Metadata
 
 Remote plugins published over DNS-SD may use `url` metadata to advertise a
@@ -76,6 +88,7 @@ metadata without a focused live probe.
 ## Related
 
 - `bugs/local-plugin-discovery-stale-after-invalid-manifest.md`
+- `bugs/local-plugin-launcher-session-hostname-cors.md`
 - `patterns/plugin-window-sizing.md`
 - `patterns/remote-plugin-dnssd-publishing.md`
 

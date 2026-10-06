@@ -124,8 +124,9 @@ any Designer Python work. This agent is the mandatory final step — not optiona
    or `npm run cli -- scaffold <plugin-name> -- --type remote --backend python`
    for remote plugins, then run `npm install`
 2. **Designer Python Engineer** -> pre-flight, search KB/reference-tools for
-   each Designer API, run focused live Designer probes when behavior is not
-   already proven
+   each Designer API, run focused live Designer probes with
+   `npm run cli -- kb submit-probe <probe.py>` when behavior is not already
+   proven and the result may be reusable KB evidence
 3. **Plugin Frontend Engineer** -> wire Vue composables, UI, and Python module
    calls
 4. **QA Engineer** -> crasher audit, plugin build, and test-suite/probe review

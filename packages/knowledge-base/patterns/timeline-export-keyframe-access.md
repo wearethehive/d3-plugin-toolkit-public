@@ -74,6 +74,10 @@ key_class = str(type(key0).__name__)  # 'KeyFloat', 'KeyResource', or 'KeyAsKeyC
 ```
 Use direct KeyFloat access or `getSequencedValue()` instead.
 
+On r34.0.3, calling `.eval()` also emitted an explicit deprecation warning that
+it will be restricted from plugins in a future release. See
+`fieldsequence-eval-deprecated-for-plugins.md`.
+
 ## VariableVideoModule: Complete Sequence Map (53 sequences)
 
 ### KeyResource sequences (5):

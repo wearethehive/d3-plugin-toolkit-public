@@ -16,28 +16,20 @@ export const ROOT = join(__dirname, "..", "..");
 export const KB_DIR = join(ROOT, "packages", "knowledge-base");
 export const MCP_INDEX_PATH = join(KB_DIR, "mcp-index.json");
 
+const PRIVATE_MARKER_FILE = join(ROOT, "scripts", "private-kb-markers.json");
+const LOCAL_PRIVATE_MARKERS = existsSync(PRIVATE_MARKER_FILE)
+  ? JSON.parse(readFileSync(PRIVATE_MARKER_FILE, "utf8"))
+  : [];
+
 export const PRIVATE_MARKERS = [
   "packages/private-helpers/",
   "packages\\private-helpers\\",
   "docs/private-helper-architecture.md",
   "packages/plugins/",
   "packages\\plugins\\",
-  "colour-categories",
-  "cuey",
-  "indirection-manager",
-  "notch-keyframe-baker",
-  "programming-helper",
-  "smartGroups",
-  "SmartGroups",
-  "smartgroups",
-  "smart-groups",
-  "sorty",
-  "timecode-switcher",
-  "warpy",
-  "lazyeos",
-  "LazyEOS",
-  "FILEY",
-  "Jack_Sync",
+  "packages/remote-plugins/",
+  "packages\\remote-plugins\\",
+  ...LOCAL_PRIVATE_MARKERS,
 ];
 
 const KB_CATEGORIES = ["api", "patterns", "bugs"];

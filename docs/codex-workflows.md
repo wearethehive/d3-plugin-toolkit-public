@@ -22,6 +22,18 @@ If a rule exists in both systems, keep the intent aligned. Codex must not depend
 on Claude reading Codex files, and Codex must not depend on reading private
 Claude local settings.
 
+## Git Branch Policy
+
+Do not create feature branches, PR branches, or draft PRs by default. Branches
+are opt-in for this workspace: create one only when the user explicitly asks
+for a branch, PR, or branch-based review flow.
+
+When the user asks to commit or push ordinary scoped changes, use the current
+branch and push it directly after checking the worktree and confirming the
+intended scope. If Codex is already on an accidental temporary branch and the
+user wants the work on the default branch, fast-forward the default branch when
+possible and delete the temporary branch only when requested.
+
 ## Mandatory Operating Model Gate
 
 Before implementation, Codex must choose one of two operating models and say
@@ -82,6 +94,9 @@ Required toolkit entry points:
 - Read `docs/cheat-sheet.md` before assuming how scaffold, probe, deploy, or
   knowledge promotion commands work.
 - Use the CLI to scaffold new plugins and to run live Designer checks.
+- Use `npm run cli -- kb submit-probe <probe.py>` for focused live Designer
+  probes that may produce reusable KB evidence. Use plain `exec --file` only
+  for throwaway private debugging.
 - Use the KB as the first source of implementation truth; `d3.pyi` is only a
   signature grep target.
 
@@ -103,7 +118,8 @@ Mandatory pre-flight before a single line of Designer Python is written:
 6. Check the relevant official Disguise documentation before forming a
    hypothesis from `d3.pyi`.
 7. If no proven pattern exists, write and run a focused probe before
-   implementing.
+   implementing. Prefer `npm run cli -- kb submit-probe <probe.py>` for probes
+   that may produce reusable KB evidence.
 
 Rules:
 
@@ -262,8 +278,9 @@ for a frontend-only/static plugin.
    for remote plugins.
 2. Designer Python Engineer: search the KB and reference probes for each
    Designer API the plugin needs.
-3. Designer Python Engineer: run focused live Designer probes when behavior is
-   not already proven.
+3. Designer Python Engineer: run focused live Designer probes through
+   `npm run cli -- kb submit-probe <probe.py>` when behavior is not already
+   proven.
 4. Plugin Frontend Engineer: implement Vue/composables and Python module calls.
 5. QA Engineer: build the plugin and audit Designer Python crash risks.
 6. Knowledge Curator: update KB/logs if new behavior was learned and complete
@@ -306,6 +323,22 @@ Model: Orchestrated Structural Work.
 2. QA Engineer: add missing test-suite coverage where appropriate.
 3. Toolkit Engineer if CLI/schema/index behavior must change.
 4. Knowledge Curator: present promotion candidates to the user.
+
+### Knowledge Base Coverage Sprint
+
+Model: Orchestrated Structural Work.
+
+Use `docs/kb-coverage-sprints.md` when expanding KB coverage from `d3.pyi`,
+official docs, known KB gaps, or user workflow ideas.
+
+1. Knowledge Curator: generate 10-20 candidate cards and classify fixture,
+   risk, and verification needs.
+2. User review: approve, defer, discard, or reclassify candidates before probe
+   implementation.
+3. Designer Python Engineer: write focused probes only for approved cards.
+4. QA Engineer: verify cleanup, risk boundaries, and evidence quality.
+5. Knowledge Curator: promote only confirmed conclusions into `api/`,
+   `patterns/`, or `bugs/`; keep stub-only hypotheses quarantined.
 
 ## Promotion Threshold
 

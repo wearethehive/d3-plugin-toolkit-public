@@ -30,6 +30,11 @@ The public knowledge base should publish conclusions, not raw inherited tools.
   can be named in prose when they are important evidence, but they are not the
   public contract.
 
+For planned coverage expansion, use
+`../../docs/kb-coverage-sprints.md`. Stub-derived candidates from
+`packages/shared/d3.pyi` must remain quarantined until reviewed, probed, and
+rewritten as curated KB conclusions.
+
 ## Entry Format
 
 Each markdown file follows this structure:
@@ -70,5 +75,7 @@ Documented gotchas.
 Use the CLI:
 - `d3 test "expression"` — runs and records to test-log.jsonl
 - `d3 probe TypeName` — introspects and records attributes
+- `d3 kb submit-probe path/to/probe.py` — runs a focused probe, writes a
+  redacted submission payload, and follows the configured KB contribution mode
 
 Manually: create a markdown file following the format above and add an entry to `api/index.json`.

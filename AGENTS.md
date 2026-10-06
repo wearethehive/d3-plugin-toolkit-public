@@ -31,6 +31,9 @@ on them for behavior. The Codex-facing workflow is this file plus
 
 - Preserve user work. Check the worktree before edits and never revert unrelated
   changes.
+- Do not create feature branches, PR branches, or draft PRs unless the user
+  explicitly asks for one. When asked to commit or push, use the current branch
+  and push it directly after confirming the intended scope.
 - Use `rg`/`rg --files` for repo searches.
 - Keep edits scoped to the requested task and existing repo patterns.
 - Treat `packages/shared/d3.pyi` as grep-only because it is large and exposes
@@ -53,7 +56,10 @@ Before writing or changing any Python that touches Designer:
 3. Search `packages/knowledge-base/patterns/`, `bugs/`, and Python probes in
    `reference-tools/` for the API or behavior.
 4. Grep `packages/shared/d3.pyi` for unfamiliar method/property names.
-5. If no proven pattern exists, write and run a probe before implementing.
+5. If no proven pattern exists, write and run a focused probe before
+   implementing. Use `npm run cli -- kb submit-probe <probe.py>` when the result
+   may be reusable KB evidence; use plain `exec --file` only for throwaway
+   private debugging.
 6. Record confirmed discoveries in the knowledge base.
 
 Critical Python rules:
@@ -96,9 +102,10 @@ workspace structure. Use the toolkit as the public user would:
 7. Before using any Designer API, search the KB and reference probes first:
    `packages/knowledge-base/patterns/`, `bugs/`, and `reference-tools/`.
 8. If behavior is not proven, run a focused probe against live Designer with the
-   CLI, for example `npm run cli -- exec --file <probe.py>`, `npm run cli --
-   test "<expr>"`, or a purpose-built test suite. Use broad `npm run cli --
-   probe <target> --unsafe-dir` only in disposable sessions.
+   contribution-aware CLI path, for example `npm run cli -- kb submit-probe
+   <probe.py>`, `npm run cli -- test "<expr>"`, or a purpose-built test suite.
+   Use plain `exec --file` only for throwaway private debugging. Use broad
+   `npm run cli -- probe <target> --unsafe-dir` only in disposable sessions.
 9. Capture live-context changes when useful with `npm run cli -- session
    snapshot` before and after the work, then `npm run cli -- session diff`.
 10. Build local plugins with `npm -w packages/plugins/<plugin> run build`.

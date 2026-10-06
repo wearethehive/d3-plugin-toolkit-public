@@ -26,9 +26,11 @@ npm run build:cli          # build the CLI
 
 ## Configure Deploy Path (`.d3-toolkit.json`)
 
-The public repo includes `.d3-toolkit.example.json` with a placeholder Designer
-project path. Use it as the starting point for a local `.d3-toolkit.json` in the
-**repo root** to set where plugin builds output to:
+The repo root `.d3-toolkit.json` controls local toolkit behavior. In the
+canonical private repo it can mark the workspace as `maintainer` for KB
+contribution handling. The public repo ships with community KB defaults and also
+includes `.d3-toolkit.example.json` with a placeholder Designer project path.
+Use the example as the starting point for deploy settings in `.d3-toolkit.json`:
 
 ```json
 {
@@ -38,6 +40,29 @@ project path. Use it as the starting point for a local `.d3-toolkit.json` in the
 
 When set, every `vite build` outputs to **both** `dist/` and `<deployPath>/<pluginName>/`.
 No separate deploy step needed — `dist/` stays fresh and Designer gets the update.
+
+For KB probe contribution handling, use:
+
+```json
+{
+  "kbContributionMode": "maintainer"
+}
+```
+
+in the canonical private repo, or:
+
+```json
+{
+  "kbContributionMode": "community",
+  "kbTelemetry": {
+    "default": "off",
+    "promptOnFirstEligibleProbe": true
+  }
+}
+```
+
+in public/community workspaces. Telemetry consent is user-level state, configured
+with `npm run cli -- kb telemetry on|off|status`; do not commit user consent.
 
 To deploy every plugin to multiple default projects, use `deployPaths`:
 
@@ -223,6 +248,26 @@ Broad `dir()` probes can crash Designer on some objects, so the command refuses
 to run unless `--unsafe-dir` is passed. Prefer existing focused probes in
 `packages/knowledge-base/reference-tools/` or write a narrow probe and run it
 with `npm run cli -- exec --file <probe.py>`.
+
+---
+
+## Capture A Focused Probe For KB Contribution
+
+```bash
+npm run cli -- kb submit-probe packages/knowledge-base/reference-tools/probe_name.py
+npm run cli -- kb run-probe packages/knowledge-base/reference-tools/probe_name.py
+npm run cli -- kb telemetry status
+npm run cli -- kb telemetry on
+npm run cli -- kb telemetry off
+```
+
+`kb submit-probe` runs the probe, redacts the result, and writes one local JSON
+payload under `kb-submissions/`. In `maintainer` mode it skips upload and logs
+evidence for local KB promotion. In `community` mode it uploads only when user
+telemetry consent is on and an isolated collector endpoint is configured.
+
+Use plain `exec --file` for throwaway private debugging. Use `kb submit-probe`
+for focused probes that may produce reusable KB evidence.
 
 ---
 

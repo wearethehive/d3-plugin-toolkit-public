@@ -4,7 +4,6 @@ dist/
 .env
 .DS_Store
 *.tsbuildinfo
-.d3-toolkit.json
 .mcp.json
 *_timeline.json
 *.bak

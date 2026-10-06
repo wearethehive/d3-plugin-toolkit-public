@@ -1,0 +1,7 @@
+{
+  "kbContributionMode": "community",
+  "kbTelemetry": {
+    "default": "off",
+    "promptOnFirstEligibleProbe": true
+  }
+}

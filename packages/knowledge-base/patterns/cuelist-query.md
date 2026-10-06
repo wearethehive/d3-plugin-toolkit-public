@@ -5,7 +5,7 @@ tested: "2026-04-19"
 api_coverage:
   - name: "section layer membership"
     match: "sectionToBeat\\s*\\(|sectionLengthBeats\\s*\\(|getSequencedValue\\s*\\("
-    related_files: ["cuelist-query.md", "timeline-export-cues.md"]
+    related_files: ["cuelist-query.md", "timeline-export-cues.md", "section-length-stale-after-split.md"]
     required: false
   - name: "d3.Timecode display string"
     match: "d3\\.Timecode\\s*\\("
@@ -37,6 +37,11 @@ section_count = int(track.nSections())
 for index in range(section_count):
     beat = float(track.sectionToBeat(index))
     length = float(track.sectionLengthBeats(index))
+    effective_end = (
+        float(track.sectionToBeat(index + 1))
+        if index + 1 < section_count
+        else beat + length
+    )
     cue = track.cueAtBeat(beat)
 
     note = ""
@@ -60,6 +65,7 @@ for index in range(section_count):
         "index": index,
         "beat": beat,
         "length": length,
+        "effectiveEnd": effective_end,
         "note": note,
         "tags": cue_tags,
         "timecode": tc,
@@ -75,7 +81,7 @@ Use index-based iteration for both top-level and leaf layers.
 def section_for_layer(sections, t_start):
     for section in sections:
         start = float(section["beat"])
-        end = start + float(section["length"])
+        end = float(section["effectiveEnd"])
         if start <= float(t_start) and float(t_start) < end:
             return section
     return None
@@ -124,10 +130,14 @@ if field is not None:
 A layer belongs to a section when:
 
 ```text
-section_beat <= layer.tStart < section_beat + section_length
+section_beat <= layer.tStart < next_section_beat
 ```
 
 Layers that span multiple sections are listed only under the section where they
 start. That keeps the UI deterministic and avoids duplicate layer rows.
+
+Do not use `sectionLengthBeats()` as the upper bound for non-final sections.
+After a section split, that stored length can stay stale and overlap later
+sections. See [section-length-stale-after-split.md](../bugs/section-length-stale-after-split.md).
 
 

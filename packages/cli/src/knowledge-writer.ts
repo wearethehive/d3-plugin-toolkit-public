@@ -28,6 +28,20 @@ export interface ProbeResult {
   timestamp: string
 }
 
+export interface KbSubmissionResult {
+  probeId: string
+  title: string
+  fileName: string
+  sourceSha256: string
+  statusCode: number
+  status: unknown
+  returnValue: unknown
+  d3Log: string | null
+  pythonLog: string | null
+  timestamp: string
+  contributionMode: string
+}
+
 /** Append a test result to the append-only log. */
 export async function recordTestResult(result: TestResult): Promise<void> {
   const logPath = join(KB_ROOT, 'test-log.jsonl')
@@ -40,6 +54,13 @@ export async function recordProbeResult(result: ProbeResult): Promise<void> {
   const logPath = join(KB_ROOT, 'test-log.jsonl')
   await ensureDir(dirname(logPath))
   await appendFile(logPath, JSON.stringify({ type: 'probe', ...result }) + '\n', 'utf-8')
+}
+
+/** Append a focused probe submission result for maintainer KB promotion. */
+export async function recordKbSubmissionResult(result: KbSubmissionResult): Promise<void> {
+  const logPath = join(KB_ROOT, 'test-log.jsonl')
+  await ensureDir(dirname(logPath))
+  await appendFile(logPath, JSON.stringify({ type: 'kb-submission-probe', ...result }) + '\n', 'utf-8')
 }
 
 async function ensureDir(dir: string): Promise<void> {

@@ -141,7 +141,7 @@ Live run:
   "textureMethod": "getThumbnail",
   "downloadCalled": true,
   "saved": {
-    "path": "d:/d3 projects/plugintesting/codex_probe_output/thumbnail_probe.jpg",
+    "path": "<project>/probe-output/thumbnail.jpg",
     "size": 2046
   },
   "cleanup": "temporary jpg and output folder removed"

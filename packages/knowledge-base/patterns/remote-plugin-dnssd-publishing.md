@@ -36,7 +36,7 @@ Live smoke test on 2026-05-19 confirmed this service record:
 {
   "name": "Remote DNS-SD Smoke._d3plugin._tcp.local.",
   "port": 5173,
-  "server": "HIVE-MS-01.local.",
+  "server": "designer-host.local.",
   "properties": {
     "t": "web",
     "s": "true",

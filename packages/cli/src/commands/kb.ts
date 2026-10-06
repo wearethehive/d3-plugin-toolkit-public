@@ -1,5 +1,7 @@
 import { createHash } from 'crypto'
 import { execFile } from 'child_process'
+import { stdin as input, stdout as output } from 'process'
+import { createInterface } from 'readline/promises'
 import { promisify } from 'util'
 import { Command } from 'commander'
 import chalk from 'chalk'
@@ -7,6 +9,13 @@ import { mkdir, readFile, writeFile } from 'fs/promises'
 import { basename, dirname, join, relative, resolve } from 'path'
 import { fileURLToPath } from 'url'
 import { executePython, parseReturnValue } from '../designer-client.js'
+import { recordKbSubmissionResult } from '../knowledge-writer.js'
+import {
+  type KbContributionSettings,
+  type KbTelemetryConsent,
+  resolveKbContributionSettings,
+  setKbTelemetryConsent,
+} from '../toolkit-config.js'
 
 const execFileAsync = promisify(execFile)
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -182,8 +191,130 @@ and promote only the distilled pattern, bug, or API note.
 `
 }
 
+async function promptForTelemetryConsent(settings: KbContributionSettings): Promise<KbTelemetryConsent> {
+  if (!settings.promptOnFirstEligibleProbe || !input.isTTY || !output.isTTY) {
+    return settings.telemetryConsent
+  }
+
+  console.log()
+  console.log(chalk.cyan('This probe produced a redacted KB submission payload.'))
+  console.log(chalk.gray('Share future eligible probe results automatically only when you are allowed to share non-confidential Designer API evidence.'))
+  console.log(chalk.gray('You can change this later with `d3 kb telemetry on|off`.'))
+
+  const rl = createInterface({ input, output })
+  try {
+    const answer = (await rl.question('Enable KB telemetry? [y/N] ')).trim().toLowerCase()
+    const consent: KbTelemetryConsent = answer === 'y' || answer === 'yes' ? 'on' : 'off'
+    await setKbTelemetryConsent(consent)
+    console.log(chalk.gray(`Saved user telemetry consent: ${consent}`))
+    return consent
+  } finally {
+    rl.close()
+  }
+}
+
+async function uploadSubmissionPayload(endpoint: string, payload: unknown): Promise<{ ok: boolean; status: number; body: string }> {
+  const response = await fetch(endpoint, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  })
+
+  let body = ''
+  try {
+    body = await response.text()
+  } catch {
+    body = ''
+  }
+
+  return { ok: response.ok, status: response.status, body }
+}
+
+async function handleContributionMode(payload: unknown, outputPath: string, root: string): Promise<KbContributionSettings> {
+  const settings = await resolveKbContributionSettings(root)
+  console.log(chalk.gray(`KB contribution mode: ${settings.mode} (${settings.modeSource})`))
+
+  if (settings.mode === 'maintainer') {
+    console.log(chalk.gray('Upload skipped; maintainer workspaces promote probe evidence through the local KB workflow.'))
+    return settings
+  }
+
+  if (settings.mode === 'off') {
+    console.log(chalk.gray('Upload skipped; KB contribution handling is off.'))
+    return settings
+  }
+
+  if (settings.mode === 'local-only') {
+    console.log(chalk.gray('Upload skipped; local-only mode is configured.'))
+    return settings
+  }
+
+  if (!settings.uploadEndpoint) {
+    console.log(chalk.gray('Upload skipped; no KB upload endpoint is configured.'))
+    console.log(chalk.gray(`Local payload remains available at: ${outputPath}`))
+    return settings
+  }
+
+  const consent = await promptForTelemetryConsent(settings)
+  if (consent !== 'on') {
+    console.log(chalk.gray('Upload skipped; telemetry consent is off.'))
+    return settings
+  }
+
+  try {
+    const upload = await uploadSubmissionPayload(settings.uploadEndpoint, payload)
+    if (upload.ok) {
+      console.log(chalk.green(`Uploaded KB submission to ${settings.uploadEndpoint}`))
+    } else {
+      console.log(chalk.yellow(`Upload failed with HTTP ${upload.status}. Local payload was kept.`))
+      if (upload.body) console.log(chalk.gray(upload.body.slice(0, 500)))
+    }
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error)
+    console.log(chalk.yellow(`Upload failed: ${message}. Local payload was kept.`))
+  }
+
+  return settings
+}
+
+const telemetryCommand = new Command('telemetry')
+  .description('Configure user-level KB telemetry consent')
+  .argument('<state>', 'on, off, or status')
+  .action(async (state: string) => {
+    const normalized = state.trim().toLowerCase()
+    if (normalized === 'status') {
+      const settings = await resolveKbContributionSettings(ROOT)
+      console.log(chalk.cyan('KB telemetry status'))
+      console.log(chalk.gray('  Contribution mode:'), settings.mode, chalk.gray(`(${settings.modeSource})`))
+      console.log(chalk.gray('  Telemetry consent:'), settings.telemetryConsent, chalk.gray(`(${settings.telemetryConsentSource})`))
+      console.log(chalk.gray('  Prompt on first eligible probe:'), settings.promptOnFirstEligibleProbe ? 'yes' : 'no')
+      console.log(chalk.gray('  Upload endpoint:'), settings.uploadEndpoint || '(not configured)')
+      return
+    }
+
+    if (normalized !== 'on' && normalized !== 'off') {
+      console.error(chalk.red('Telemetry state must be one of: on, off, status'))
+      process.exitCode = 1
+      return
+    }
+
+    await setKbTelemetryConsent(normalized)
+    const settings = await resolveKbContributionSettings(ROOT)
+    console.log(chalk.green(`Saved KB telemetry consent: ${normalized}`))
+    if (normalized === 'on') {
+      console.log(chalk.gray('Only run eligible probes with telemetry on when you are allowed to share non-confidential Designer API evidence.'))
+    }
+    console.log(chalk.gray('Effective contribution mode:'), settings.mode)
+    if (normalized === 'on' && !settings.uploadEndpoint) {
+      console.log(chalk.yellow('No KB upload endpoint is configured yet, so future probes will keep local JSON only.'))
+    }
+  })
+
 const submitProbeCommand = new Command('submit-probe')
-  .description('Run a local Python probe and package one JSON payload for Hive School KB submission')
+  .alias('run-probe')
+  .description('Run a local Python probe and package one JSON payload for KB contribution')
   .argument('<probeFile>', 'Path to a .py probe file')
   .option('--host <host>', 'Designer host', '127.0.0.1')
   .option('--port <port>', 'Designer port', '80')
@@ -278,8 +409,8 @@ const submitProbeCommand = new Command('submit-probe')
       createdAt,
       submissionId: `${probeId}-${createdStamp}`,
       uploadDestination: {
-        site: 'https://hiveschool.one',
-        note: 'Upload this JSON through the Hive School KB submission page. The CLI intentionally does not auto-upload.',
+        site: 'configured-isolated-collector',
+        note: 'The CLI uploads only to the configured isolated collector endpoint after user telemetry consent.',
       },
       toolkit: {
         cliVersion,
@@ -324,7 +455,8 @@ const submitProbeCommand = new Command('submit-probe')
         warnings: redactionWarnings,
       },
       consent: {
-        collectedByWebsite: true,
+        collectedByClient: true,
+        telemetryConsentRequired: true,
         rightsConfirmed: false,
         publicContributionAccepted: false,
       },
@@ -335,16 +467,35 @@ const submitProbeCommand = new Command('submit-probe')
     const outputPath = join(outputDir, `d3-kb-submission-${probeId}-${createdAt.slice(0, 10)}.json`)
     await writeFile(outputPath, `${JSON.stringify(payload, null, 2)}\n`, 'utf8')
 
+    const contributionSettings = await handleContributionMode(payload, outputPath, ROOT)
+    if (contributionSettings.mode === 'maintainer') {
+      await recordKbSubmissionResult({
+        probeId,
+        title: probeTitle,
+        fileName: basename(resolvedProbe),
+        sourceSha256: payload.probe.sourceSha256,
+        statusCode: response.status.code,
+        status: redactedStatus.value,
+        returnValue: redactedReturn.value,
+        pythonLog: redactedPythonLog.value,
+        d3Log: redactedD3Log.value,
+        timestamp: createdAt,
+        contributionMode: contributionSettings.mode,
+      })
+      console.log(chalk.gray('Recorded maintainer probe evidence to knowledge-base test log.'))
+    }
+
     if (response.status.code === 0) {
       console.log(chalk.green('Probe completed.'))
     } else {
       console.log(chalk.yellow(`Probe returned Designer status ${response.status.code}: ${response.status.message}`))
     }
     console.log(chalk.gray(`Payload:`), outputPath)
-    console.log(chalk.gray('Upload this single JSON file through Hive School. Review the preview before submitting.'))
+    console.log(chalk.gray('Keep this JSON for local review, or upload through the configured collector when consent and endpoint settings allow it.'))
   })
 
 export const kbCommand = new Command('kb')
   .description('Knowledge base submission helpers')
 
+kbCommand.addCommand(telemetryCommand)
 kbCommand.addCommand(submitProbeCommand)

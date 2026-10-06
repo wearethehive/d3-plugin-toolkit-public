@@ -74,7 +74,7 @@ Same result. **`MetaField.get` is exposed but not Python-callable**,
 regardless of calling convention, argument count, or target object type.
 The method is internal C++ machinery, not a plugin-facing API.
 
-### d3.Expression.evaluateFromString — parser-only
+### `d3.Expression.evaluateFromString` — syntax and runtime scope matter
 
 `d3.Expression()` constructs successfully. `evaluateFromString` works for
 context-free expressions where the Expression engine doesn't need to
@@ -87,7 +87,7 @@ expr.evaluateFromString("1 + 2")        # → 3       ✅
 expr.evaluateFromString("time")         # → 0.0     ✅ (parser knows the symbol)
 ```
 
-But anything that requires a runtime identifier lookup fails with a
+On the older tested surface, these runtime-identifier forms failed with a
 non-Exception error:
 
 ```python
@@ -96,12 +96,15 @@ expr.evaluateFromString("osc:/timecode/select")   # non-Exception failure
 expr.evaluateFromString("osc:/anything")          # non-Exception failure
 ```
 
-The Expression class is exposed via reflection but its
-`evaluateFromString` is for **parser validation of context-free strings**,
-not for live evaluation of expressions that traverse Designer's
-identifier namespace. The full expression engine only runs inside the
-rendering pipeline against a real `FieldSequence` on a real layer
-property.
+Later testing on r34.0.3 confirmed that documented prefix expressions can be
+evaluated when they use the supported prefix syntax and coerce the result to a
+scalar. For example, an `osc:address.path` value wrapped in arithmetic returned
+a live numeric value, while the bare `osc:address.path` form failed to convert
+its array-like result. Custom project-defined function names still were not in
+scope. See `expression-feedback-read-via-evaluatefromstring.md`.
+
+Treat failures here as version- and syntax-specific. Do not generalise a
+successful literal parse into proof that every runtime identifier is available.
 
 ## How to defend against this in probes
 
